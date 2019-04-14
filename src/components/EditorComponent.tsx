@@ -16,6 +16,7 @@ const EditorWrap = styled.div`
         margin:2px;
         font-size:13px;
         font-family: "Arial";
+        overflow:auto;
     }
     [contenteditable=true]:empty:before{
         content: attr(placeholder);
@@ -28,21 +29,31 @@ export default function EditorComponent() {
     const latinEditor: any = useRef<string>("");
     const crylicEditor: any = useRef<string>("");
     const [crylicValue, setCrylicValue] = useState<string>("")
+    const latinContentListener = (e: any) => {
+        let htmlContent = e.target.innerHTML + "<";
+        // htmlContent.replace(/(w+)(<[^>]+>)(w+)/ig, (a: string, b: string, c: string, f: string) => {
+        // htmlContent.replace(/([\w\s?]+)<[^>]+>([\w\s?]+)/ig, (a: string, b: string, c: string, f: string) => {
+        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g, (a: string, b: string, c: string, f: string): string => {
+            console.log("REPLACEMENT === ", c, parseUtils.parseToCrylic(c))
+            return String(b + parseUtils.parseToCrylic(c) + f);
+        })
+        setCrylicValue(htmlContent)
+    }
     return (
         <EditorWrap>
             <div ref={latinEditor}
                  contentEditable={true}
                  className="editable latin-editor"
                  placeholder="Lotincha matn..."
-                 onKeyUp={(e: any) => setCrylicValue(parseUtils.parseToCrylic(e.target.innerHTML))}
+                 onKeyUp={latinContentListener}
 
             >
             </div>
             <div ref={crylicEditor}
                  contentEditable={true}
                  className="editable crylic-editor"
-                 placeholder="Krilcha matn..." >
-                {crylicValue}
+                 placeholder="Krilcha matn..."
+                 dangerouslySetInnerHTML={{__html: crylicValue}}>
             </div>
         </EditorWrap>
     )
