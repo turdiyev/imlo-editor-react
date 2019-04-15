@@ -15,6 +15,7 @@
     "react-dom": "^16.8.6",
     "react-pose": "^4.0.8",
     "react-scripts": "2.1.8",
+    "react-switch": "^4.1.0",
     "react-toastify": "^5.0.1",
     "styled-components": "^4.2.0",
     "typescript": "3.4.3"

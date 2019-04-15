@@ -2,36 +2,14 @@ import React, { ReactNode, useState } from 'react'
 import styled from "styled-components"
 import IconSpellCheckSVG from "../../components/svg/IconSpellCheckSVG"
 import IconSettingsSVG from "../../components/svg/IconSettingsSVG"
-import posed from 'react-pose'
 
 interface IProps {
-    children: ReactNode
+    children: ReactNode,
+    settingsClickListener: (e:any) => void
 }
 
-const ConfigSidebar = posed.div({
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-    exit: {
-        x: '100%'
-    },
-    enter: {
-        x: '0%',
-        beforeChildren: true,
-        staggerChildren: 10
-    }
-});
-
 const Layout = styled.div`
-    .settings-sidebar{
-        position:fixed;
-        right:0;
-        top:60px;
-        bottom:0;
-        overflow:auto;
-        width: 240px;
-        background: white;
-        box-shadow: -1px 1px 5px rgba(0,0,0,0.1);
-    }
+   
 `
 const Nav = styled.nav`
     min-height:40px;
@@ -64,8 +42,7 @@ const Nav = styled.nav`
     }
 `
 
-export default function MainLayout({ children }: IProps) {
-    const [sidebarVisible, setSidebarVisible] = useState<boolean>(false);
+export default function MainLayout({ children, settingsClickListener }: IProps) {
     return (
         <Layout>
             <Nav>
@@ -74,13 +51,10 @@ export default function MainLayout({ children }: IProps) {
                         <IconSpellCheckSVG size={24} color="#5983e8" /> Imlo Editor
                     </div>
                 </h2>
-                <button className="btn"  onClick={e => setSidebarVisible(!sidebarVisible)}>
+                <button className="btn" onClick={settingsClickListener}>
                     <IconSettingsSVG color="white" />
                 </button>
             </Nav>
-            <ConfigSidebar className="settings-sidebar" pose={sidebarVisible ? 'enter' : 'exit'}>
-
-            </ConfigSidebar>
             {children}
         </Layout>
     )
