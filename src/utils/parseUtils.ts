@@ -19,6 +19,18 @@ export const clearCrylicContent = (content: string) => {
         .replace(/\B-?([\u0400-\u04FF\w]+\-?[\u0400-\u04FF\w]+)-?\B/g, "$1");
 }
 
+export const clearHTMLContent = (content: string) => {
+    // const lower_content = content.toLowerCase();cleaned_content
+    // .replace(/([\d\,\.\\\/\’\"\”\“\«\»\%\?\_\+\=\!\:\;\]\[\{\}\(\)\*\•\✅])/g, ' ')
+
+    return trim(content)
+        .replace(/<[^>]+>/g, '')
+        .replace(/&[^;]+;/g, ' ')
+        .replace(/[^\u0400-\u04FF\w\d\-\s]/g, ' ')
+        .replace(/\–\—\-/g, '-')
+        .replace(/\s{2,}/g, " ")
+}
+
 export const clearLatinContent = (content: string) => {
     // const lower_content = content.toLowerCase();cleaned_content
     // .replace(/([\d\,\.\\\/\’\"\”\“\«\»\%\?\_\+\=\!\:\;\]\[\{\}\(\)\*\•\✅])/g, ' ')
