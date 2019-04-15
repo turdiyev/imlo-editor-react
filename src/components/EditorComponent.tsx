@@ -8,6 +8,7 @@ import IconHandRightArrowSVG from "./svg/IconHandRightArrowSVG"
 import IconBoldSVG from "./svg/IconBoldSVG"
 import IconItalicSVG from "./svg/IconItalicSVG"
 import IconUnderlineSVG from "./svg/IconUnderlineSVG"
+import { toast } from 'react-toastify';
 interface IContentObject {
     htmlContent: string,
     textContent: string
@@ -27,7 +28,7 @@ const EditorWrap = styled.div`
     }
     .editable{
         background:white;
-        height: 200px;
+        height: 400px;
         padding:10px;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
         border:1px solid #ccc;
@@ -157,7 +158,20 @@ export default function EditorComponent() {
 
     }
 
-    // const crylic_word_count = document.querySelector(".crylic-editor").textContent;
+    const copyListener = (text: string, section: string = "Lotincha matn") => {
+        if (text) {
+            const nvgtr: any = window.navigator;
+            nvgtr.clipboard.writeText(text).then(function () {
+                toast.info(section + " nusxasi Bufferga olindi !");
+                // console.log('Async: Copying to clipboard was successful!');
+            }, function (err: string) {
+                toast.error(section + " nusxasini Bufferga olishda XATOLIK:" + err);
+                // console.error('Async: Could not copy text: ', err);
+            });
+        } else {
+            toast.error("Matnni kiriting!");
+        }
+    }
 
     return (
         <>
@@ -177,6 +191,14 @@ export default function EditorComponent() {
                         <div className="count-info">
                             Lotincha matn: {latinObj.textContent.length} ta belgi
                         </div>
+                        <div className="action-box">
+                            <button className="btn" onClick={e => copyListener(crylicObj.htmlContent, "Kirilcha HTML-kontenti")}>
+                                <CopyHTMLContentSVG title="To'liq(HTML bilan) nusxalash" color="#666" />
+                            </button>
+                            <button className="btn" onClick={e => copyListener(crylicObj.textContent, "Kirilcha matni(HTML siz)")}>
+                                <CopyTextContentSVG title="Faqat matnni nusxalash" />
+                            </button>
+                        </div>
                     </EditorFooter>
                 </div>
                 <div className='editable-box'>
@@ -193,16 +215,13 @@ export default function EditorComponent() {
                             Кирилча матн: {crylicObj.textContent.length} та белги
                         </div>
                         <div className="action-box">
-                            <label>
-                                <input type="checkbox" /> Krilcha chapda tursin
-                            </label>
-                            <button className="btn">
-                                <CopyHTMLContentSVG title="Тўлиқ нусхалаш" color="#666" />
+                            <button className="btn" onClick={e => copyListener(crylicObj.htmlContent, "Kirilcha HTML-kontenti")}>
+                                <CopyHTMLContentSVG title="Тўлиқ(HTML билан) нусхалаш" color="#666" />
                             </button>
-                            <button className="btn">
+                            <button className="btn" onClick={e => copyListener(crylicObj.textContent, "Kirilcha matni(HTML siz)")}>
                                 <CopyTextContentSVG title="Фақат матнни нусхалаш" />
                             </button>
-                            <button className="btn btn-convert">
+                            <button className="btn btn-convert hide">
                                 <IconHandRightArrowSVG title="Лотинга ўгириш" color="#5983e8" />
                             </button>
                         </div>
