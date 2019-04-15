@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, { useRef, useState } from 'react'
 import * as parseUtils from "../utils/parseUtils"
 import styled from 'styled-components';
 
@@ -35,26 +35,36 @@ export default function EditorComponent() {
         // htmlContent.replace(/([\w\s?]+)<[^>]+>([\w\s?]+)/ig, (a: string, b: string, c: string, f: string) => {
         htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g, (a: string, b: string, c: string, f: string): string => {
             console.log("REPLACEMENT === ", c, parseUtils.parseToCrylic(c))
-            return String(b + parseUtils.parseToCrylic(c) + f);
+            let parsed_str = parseUtils.parseToCrylic(c);
+            parsed_str = parsed_str.replace(/&([^;]+);/g, (all, first) =>
+                "&" + parseUtils.parseToLatin(first) + ";")
+            return String(b + parsed_str + f);
         })
-        setCrylicValue(htmlContent)
+        setCrylicValue(htmlContent.slice(0, -1))
     }
     return (
-        <EditorWrap>
-            <div ref={latinEditor}
-                 contentEditable={true}
-                 className="editable latin-editor"
-                 placeholder="Lotincha matn..."
-                 onKeyUp={latinContentListener}
+        <>
+            <EditorWrap>
+                <div ref={latinEditor}
+                    contentEditable={true}
+                    className="editable latin-editor"
+                    placeholder="Lotincha matn..."
+                    onKeyUp={latinContentListener}
 
-            >
+                >
+                </div>
+                <div ref={crylicEditor}
+                    contentEditable={true}
+                    className="editable crylic-editor"
+                    placeholder="Krilcha matn..."
+                    dangerouslySetInnerHTML={{ __html: crylicValue }}>
+                </div>
+            </EditorWrap>
+
+            <div
+                placeholder="Krilcha matn...">
+                {crylicValue}
             </div>
-            <div ref={crylicEditor}
-                 contentEditable={true}
-                 className="editable crylic-editor"
-                 placeholder="Krilcha matn..."
-                 dangerouslySetInnerHTML={{__html: crylicValue}}>
-            </div>
-        </EditorWrap>
+        </>
     )
 } 
