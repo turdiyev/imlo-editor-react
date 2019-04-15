@@ -5,7 +5,7 @@ export const LATIN_LETTER_PAIRS: ReadonlyArray<[{}, {}]> = [["A", "А"], ["a", "
 
 export const CRYLIC_MAP: Map<{}, {}> = new Map(CRYLIC_LETTER_PAIRS)
 export const LATIN_MAP: Map<{}, {}> = new Map(LATIN_LETTER_PAIRS)
-import {toLower, trim} from "lodash"
+import { toLower, trim } from "lodash"
 
 export const clearCrylicContent = (content: string) => {
     // const lower_content = content.toLowerCase();cleaned_content
@@ -81,7 +81,8 @@ export const parseToCrylic = (latin_text: string = ""): string => {
     latin_text = latin_text.replace(/\b([e])/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'i'))
     })
-
+    latin_text = latin_text.replace(/([aeiuo])e/ig, '$1э')
+    
     latin_text = latin_text.replace(/([y])e/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'e'))
     })
@@ -94,7 +95,15 @@ export const parseToCrylic = (latin_text: string = ""): string => {
         return String(LATIN_MAP.get(first + 'a'))
     })
 
-    latin_text = latin_text.replace(/([y])o/ig, (match: string, first: string) => {
+    latin_text = latin_text.replace(/([o])(['`ʼʻ‘])/ig, (match: string, first: string, second: string) => {
+        return String(LATIN_MAP.get(first + 'ʻ'))
+    })
+
+    latin_text = latin_text.replace(/([g])(['`ʼʻ‘])/ig, (match: string, first: string, second: string) => {
+        return String(LATIN_MAP.get(first + 'ʻ'))
+    })
+
+    latin_text = latin_text.replace(/([y])o/ig, (match: string, first: string, second: string) => {
         return String(LATIN_MAP.get(first + 'o'))
     })
 
@@ -110,13 +119,6 @@ export const parseToCrylic = (latin_text: string = ""): string => {
         return String(LATIN_MAP.get(first + 'h'))
     })
 
-    latin_text = latin_text.replace(/([o])(['`ʼʻ‘])/ig, (match: string, first: string, second: string) => {
-        return String(LATIN_MAP.get(first + 'ʻ'))
-    })
-
-    latin_text = latin_text.replace(/([g])(['`ʼʻ‘])/ig, (match: string, first: string, second: string) => {
-        return String(LATIN_MAP.get(first + 'ʻ'))
-    })
 
     latin_text = latin_text.replace(/([y])o/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'o'))

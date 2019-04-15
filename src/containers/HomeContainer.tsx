@@ -1,12 +1,14 @@
 import React from 'react'
-import ContentEditable from 'react-contenteditable'
+import MainLayout from './layout/MainLayout'
 import EditorComponent from '../components/EditorComponent'
 
 export default function HomeContainer() {
 
     return (
-        <EditorComponent
+        <MainLayout>
+            <EditorComponent
 
-        />
+            />
+        </MainLayout>
     )
 } 

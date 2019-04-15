@@ -5,6 +5,9 @@ import CopyHTMLContentSVG from "./svg/CopyHTMLContentSVG"
 import CopyTextContentSVG from "./svg/CopyTextContentSVG"
 import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
 import IconHandRightArrowSVG from "./svg/IconHandRightArrowSVG"
+import IconBoldSVG from "./svg/IconBoldSVG"
+import IconItalicSVG from "./svg/IconItalicSVG"
+import IconUnderlineSVG from "./svg/IconUnderlineSVG"
 interface IContentObject {
     htmlContent: string,
     textContent: string
@@ -20,7 +23,7 @@ const EditorWrap = styled.div`
     }
     .editable-box{
         width:50%;
-        margin:10px 2px;
+        margin:2px 2px 15px;
     }
     .editable{
         background:white;
@@ -28,7 +31,7 @@ const EditorWrap = styled.div`
         padding:10px;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
         border:1px solid #ccc;
-        font-size:13px;
+        font-size:15px;
         font-family: "Arial";
         overflow:auto;
     }
@@ -42,21 +45,34 @@ const EditorWrap = styled.div`
         color:#ccc;
     }
 
-    .editable-box__footer{
-        margin-top:2px;  
-        color: #999;
-        padding:2px;
-        background: rgba(0,0,0,0.04);
-        display:flex;
-        font-size: 11px;
-    }
+    
 
-    .editable-box__footer .count-info{
+`;
+
+const EditorHeader = styled.div`
+    background:  rgba(0,0,0,0.1);
+    padding:5px;
+
+    .btn{
+        border:1px solid rgba(0,0,0,0.05);
+        background:#fff;   
+        padding:5px 7px 3px; 
+    }
+`
+
+const EditorFooter = styled.div`
+    margin-top:2px;  
+    color: #999;
+    padding:2px;
+    background: rgba(0,0,0,0.04);
+    display:flex;
+    font-size: 11px;
+
+    .count-info{
         padding:10px;
         flex:1;
     }
-
-    .editable-box__footer .action-box .btn{
+    .action-box .btn{
         border: 1px solid transparent;
         padding: 3px 6px 4px;
         text-align:center;
@@ -67,20 +83,19 @@ const EditorWrap = styled.div`
         transition: all ease  1s
     }
 
-    .editable-box__footer .action-box .btn svg{
+    .action-box .btn svg{
         vertical-align:sub;
     }
-
-    .editable-box__footer .action-box .btn-convert{
+    .action-box .btn-convert{
         /*color:#5983e8;
         font-size:12px !important;
         border: 1px solid #5983e8;*/
     }
-    .editable-box__footer .action-box .btn:hover{
+    .action-box .btn:hover{
         border: 1px solid #666;
         background: white;
     }
-`;
+`
 export default function EditorComponent() {
     const latinEditor: any = useRef<string>("");
     const crylicEditor: any = useRef<string>("");
@@ -93,7 +108,7 @@ export default function EditorComponent() {
 
     const latinContentListener = (e: any) => {
         let htmlContent = e.target.innerHTML;
-        // setLatinValue(htmlContent);
+
         setLatinObj({
             htmlContent: htmlContent,
             textContent: parseUtils.clearHTMLContent(htmlContent)
@@ -101,15 +116,13 @@ export default function EditorComponent() {
 
         htmlContent += "<";
 
-        // htmlContent.replace(/(w+)(<[^>]+>)(w+)/ig, (a: string, b: string, c: string, f: string) => {
-        // htmlContent.replace(/([\w\s?]+)<[^>]+>([\w\s?]+)/ig, (a: string, b: string, c: string, f: string) => {
-        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g, (a: string, b: string, c: string, f: string): string => {
-            console.log("REPLACEMENT === ", c, parseUtils.parseToCrylic(c))
-            let parsed_str = parseUtils.parseToCrylic(c);
-            parsed_str = parsed_str.replace(/&([^;]+);/g, (all, first) =>
-                "&" + parseUtils.parseToLatin(first) + ";")
-            return String(b + parsed_str + f);
-        })
+        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
+            (all: string, b: string, c: string, f: string): string => {
+                let parsed_str = parseUtils.parseToCrylic(c);
+                parsed_str = parsed_str.replace(/&([^;]+);/g, (all, first) =>
+                    "&" + parseUtils.parseToLatin(first) + ";")
+                return String(b + parsed_str + f);
+            })
         htmlContent = htmlContent.slice(0, -1);
         setCrylicValue(htmlContent)
         setCrylicObj({
@@ -122,22 +135,18 @@ export default function EditorComponent() {
 
     const crylicContentListener = (e: any) => {
         let htmlContent = e.target.innerHTML;
+
         setCrylicObj({
             htmlContent,
             textContent: parseUtils.clearHTMLContent(htmlContent)
         })
-        // setLatinValue(htmlContent);
         htmlContent += "<";
 
-        // htmlContent.replace(/(w+)(<[^>]+>)(w+)/ig, (a: string, b: string, c: string, f: string) => {
-        // htmlContent.replace(/([\w\s?]+)<[^>]+>([\w\s?]+)/ig, (a: string, b: string, c: string, f: string) => {
-        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g, (a: string, b: string, c: string, f: string): string => {
-            console.log("REPLACEMENT === ", c, parseUtils.parseToCrylic(c))
-            let parsed_str = parseUtils.parseToLatin(c);
-            // parsed_str = parsed_str.replace(/&([^;]+);/g, (all, first) =>
-            //     "&" + parseUtils.parseToLatin(first) + ";")
-            return String(b + parsed_str + f);
-        })
+        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
+            (all: string, b: string, c: string, f: string): string => {
+                let parsed_str = parseUtils.parseToLatin(c);
+                return String(b + parsed_str + f);
+            })
         htmlContent = htmlContent.slice(0, -1);
 
         setLatinValue(htmlContent)
@@ -164,11 +173,11 @@ export default function EditorComponent() {
                     >
                     </div>
 
-                    <div className="editable-box__footer">
+                    <EditorFooter>
                         <div className="count-info">
                             Lotincha matn: {latinObj.textContent.length} ta belgi
                         </div>
-                    </div>
+                    </EditorFooter>
                 </div>
                 <div className='editable-box'>
                     <div ref={crylicEditor}
@@ -179,7 +188,7 @@ export default function EditorComponent() {
                         onFocus={crylicContentListener}
                         dangerouslySetInnerHTML={{ __html: crylicValue }}>
                     </div>
-                    <div className="editable-box__footer">
+                    <EditorFooter>
                         <div className="count-info">
                             Кирилча матн: {crylicObj.textContent.length} та белги
                         </div>
@@ -197,7 +206,7 @@ export default function EditorComponent() {
                                 <IconHandRightArrowSVG title="Лотинга ўгириш" color="#5983e8" />
                             </button>
                         </div>
-                    </div>
+                    </EditorFooter>
                 </div>
             </EditorWrap>
 
