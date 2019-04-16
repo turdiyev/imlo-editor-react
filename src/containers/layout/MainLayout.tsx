@@ -96,8 +96,8 @@ const ModalWrap = styled.div`
         border-radius: 10px;
         padding:20px;
         &.modal2{
-            height: 220px;
-            margin-top:-130px;
+            height: 240px;
+            margin-top:-140px;
         }
         header{
             border-bottom:1px solid #dedede;
@@ -171,7 +171,7 @@ export default function MainLayout({ children, settingsClickListener }: IProps) 
                                     <li>Imkoniyatlarini solishtirishda <a href="https://savodxon.uz">Savodxon.uz</a> bilan test qilindi.</li>
                                     <li><a href="https://google.com">Google</a> va <a href="https://stackoverflow.com/">Stackoverflow</a> ni aytmasa ham bo'ladi 😄 .</li>
                                 </ol>
-                                <p>Iltimos, xato topsangiz, zudlik bilan telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>ga yozing. Biz ushbu ilovani optimallashtirib boraveramiz, Xudo xohlasa.</p>  
+                                <div style={{marginTop: 15}}>Iltimos, xato topsangiz, zudlik bilan telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>ga yozing. Biz ushbu ilovani optimallashtirib boraveramiz, Xudo xohlasa.</div>  
                             </section>
                         </Modal>
                     ]}
