@@ -31,6 +31,7 @@ const HomeSidebar = styled.div`
         right:0;
         top:0;
         bottom:0;
+        z-index:5;
         overflow:auto;
         width: 300px;
         background: white;

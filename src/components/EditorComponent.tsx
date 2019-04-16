@@ -39,13 +39,13 @@ const EditorWrap = styled.div`
      
     &.page-layout{
         position:relative;
-        margin:-17px 0 0;
+        margin:-17px 0 15px;
         .editable-box{
               width:100% !important;
               margin:0;
               .editable{
                 height:auto;
-                min-height:460px;
+                min-height:375px;
                 font-size:25px;
                 margin:0 !important;
                 padding: 40px;
