@@ -89,12 +89,16 @@ const ModalWrap = styled.div`
     .modal {
         position: fixed;
         width: 500px;
-        height: 340px;
+        height: 380px;
         top:50%;
-        margin-top:-170px;
+        margin-top:-200px;
         background: white;
         border-radius: 10px;
         padding:20px;
+        &.modal2{
+            height: 220px;
+            margin-top:-130px;
+        }
         header{
             border-bottom:1px solid #dedede;
             display:flex;
@@ -145,7 +149,7 @@ export default function MainLayout({ children, settingsClickListener }: IProps) 
                                     </span></p>
                                 <p><i>Asosiy maqsad:</i> <span>Oʻzbek tilidagi imloviy toʻgʻri soʻzlarni toʻplab, matnlardagi imloviy xatolarini aniqlash va ularni toʻgʻrilash.</span></p>
                                 <p><i>Ilova muallifi:</i> <span>Sherali Turdiyev.</span></p>
-                                <p><i>Taklif va mulohazalar uchun:</i> <span>Telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>.</span></p>
+                                <p><i>Bogʻlanish:</i> <span>Telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>.</span></p>
                             </section>
                         </Modal>
                     ]}
@@ -154,17 +158,20 @@ export default function MainLayout({ children, settingsClickListener }: IProps) 
                     {modal2 && [
                         // If animating more than one child, each needs a `key`
                         <Shade key="shade" className="shade" onClick={() => setModal2(false)} />,
-                        <Modal key="modal" className="modal" >
+                        <Modal key="modal" className="modal modal2" >
                             <header>
                                 <LogoComponent />
                             </header>
                             <section>
                                 <ol>
+                                    <li>Dasturlash tili Javascript.</li>
+                                    <li>Dasturlashda asosan <a href="https://reactjs.org/">React</a>dan foydalanildi.</li>
                                     <li>Ikonkalar <a href="https://icomoon.io/app">Icomoon.io</a> dan olindi.</li>
                                     <li>Dizayn uchun <a href="https://www.bootstrapdash.com/product/star-admin-free/">Star Admin</a> ni ranglaridan foydalanildi.</li>
                                     <li>Imkoniyatlarini solishtirishda <a href="https://savodxon.uz">Savodxon.uz</a> bilan test qilindi.</li>
                                     <li><a href="https://google.com">Google</a> va <a href="https://stackoverflow.com/">Stackoverflow</a> ni aytmasa ham bo'ladi 😄 .</li>
                                 </ol>
+                                <p>Iltimos, xato topsangiz, zudlik bilan telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>ga yozing. Biz ushbu ilovani optimallashtirib boraveramiz, Xudo xohlasa.</p>  
                             </section>
                         </Modal>
                     ]}
@@ -180,7 +187,7 @@ export default function MainLayout({ children, settingsClickListener }: IProps) 
             {children}
             <Footer>
                 <ul className="footer-menu list">
-                    <li>©2019 Imlo Editor </li>
+                    <li><b>© Imlo Editor - 2019 </b> </li>
                     <li><a onClick={(e: any) => setModal(true)}>Loyiha haqida</a></li>
                     <li><a onClick={(e: any) => setModal2(true)}>Foydalanilgan manbalar</a></li>
                 </ul>
