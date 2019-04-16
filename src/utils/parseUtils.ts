@@ -26,7 +26,6 @@ export const clearHTMLContent = (content: string) => {
     return trim(content)
         .replace(/<[^>]+>/g, '')
         .replace(/&[^;]+;/g, ' ')
-        .replace(/[^\u0400-\u04FF\w\d\-\s]/g, ' ')
         .replace(/\–\—\-/g, '-')
         .replace(/\s{2,}/g, " ")
 }
@@ -82,7 +81,7 @@ export const parseToCrylic = (latin_text: string = ""): string => {
         return String(LATIN_MAP.get(first + 'i'))
     })
     latin_text = latin_text.replace(/([aeiuo])e/ig, '$1э')
-    
+
     latin_text = latin_text.replace(/([y])e/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'e'))
     })

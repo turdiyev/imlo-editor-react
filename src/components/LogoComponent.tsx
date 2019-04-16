@@ -4,7 +4,6 @@ import styled from "styled-components"
 
 const LogoH2 = styled.h2`
     margin:0;
-    flex:1;
    
     .logo-box{
         background:rgba(255,255,255,0.8);

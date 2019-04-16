@@ -176,7 +176,7 @@ export default function HomeContainer() {
                                 </li>
                                 <li>
                                     <p className="feature-information">
-                                        Ba'zi imkoniyatlar endi qo'shilishi rejalashtirilgan.
+                                        Ba'zi imkoniyatlar ishlamaydi. Endi qo'shiladi.
                                 </p>
                                 </li>
                             </ul>
