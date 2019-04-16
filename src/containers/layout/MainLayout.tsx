@@ -17,6 +17,8 @@ const Nav = styled.nav`
     display:flex;
     margin-bottom:15px;
     line-height:40px;
+    position:relative;
+    z-index:3;
 
     background: linear-gradient(120deg, #00e4d0, #5983e8);
     transition: background 0.25s ease;
@@ -76,7 +78,7 @@ const ModalWrap = styled.div`
     align-items: center;
     justify-content: center;
     display: flex;
-  
+
     .shade {
         position: fixed;
         background: rgba(0, 0, 0, 0.4);

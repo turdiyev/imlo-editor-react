@@ -5,6 +5,7 @@ import IconCircleCloseSVG from "../components/svg/IconCircleCloseSVG"
 import IconTabSVG from "../components/svg/IconTabSVG"
 import IconStatisticChartSVG from "../components/svg/IconStatisticChartSVG"
 import IconVerticalViewSVG from "../components/svg/IconVerticalViewSVG"
+import IconPageLayoutViewSVG from "../components/svg/IconPageLayoutViewSVG"
 import posed from 'react-pose'
 import styled from 'styled-components'
 import Switch from "react-switch";
@@ -93,28 +94,33 @@ const SidebarNav = styled.nav`
 export interface ISettings {
     latinFirst: boolean,
     verticalLayout: boolean,
-    statsEnable: boolean
+    pageLayout: boolean,
+    statsEnable: boolean,
+    visibleEditorIndex: 0 | 1
 }
+
 const initialConfig: ISettings = {
     latinFirst: true,
     verticalLayout: false,
-    statsEnable: false
+    pageLayout: false,
+    statsEnable: false,
+    visibleEditorIndex: 0
 }
-export const MainConfigContext = React.createContext<ISettings>(initialConfig);
+export const MainConfigContext = React.createContext<[ISettings, any]>([initialConfig, null]);
 
 export default function HomeContainer() {
     const [sidebarVisible, setSidebarVisible] = useState<boolean>(false);
     const [config, setConfig] = useLocalStorage<ISettings>("editor_config", initialConfig);
 
     return (
-        <MainConfigContext.Provider value={config}>
+        <MainConfigContext.Provider value={[config, setConfig ]}>
             <MainLayout settingsClickListener={(e: any) => setSidebarVisible(!sidebarVisible)}>
 
                 <EditorComponent
 
                 />
 
-                <HomeSidebar >
+                <HomeSidebar>
                     <ConfigSidebar className="settings-sidebar" pose={sidebarVisible ? 'enter' : 'exit'}>
                         <header>
                             <h3><IconSettingsSVG color="#999" /> Sozlash</h3>
@@ -141,10 +147,35 @@ export default function HomeContainer() {
                                     />
                                 </li>
                                 <li>
-                                    <IconVerticalViewSVG size={24} />  <span>Vertical Joylashuv</span>
+                                    <IconVerticalViewSVG size={24} /> <span>Vertical Joylashuv</span>
                                     <Switch
-                                        onChange={checked => setConfig({ ...config, verticalLayout: checked })}
+                                        onChange={checked => setConfig({
+                                            ...config,
+                                            verticalLayout: checked,
+                                            pageLayout: false
+                                        })}
                                         checked={config.verticalLayout}
+                                        onColor="#86d3ff"
+                                        onHandleColor="#2693e6"
+                                        handleDiameter={20}
+                                        uncheckedIcon={false}
+                                        checkedIcon={false}
+                                        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                                        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                                        height={15}
+                                        width={32}
+                                    />
+                                </li>
+                                <li>
+                                    <IconPageLayoutViewSVG size={24} /> <span>Alohida matn Joylashuvi</span>
+                                    <Switch
+                                        onChange={checked => setConfig({
+                                            ...config,
+                                            pageLayout: checked,
+                                            verticalLayout: false,
+                                            visibleEditorIndex: 0,
+                                        })}
+                                        checked={config.pageLayout}
                                         onColor="#86d3ff"
                                         onHandleColor="#2693e6"
                                         handleDiameter={20}
@@ -176,7 +207,7 @@ export default function HomeContainer() {
                                 <li>
                                     <p className="feature-information">
                                         Ba'zi imkoniyatlar ishlamaydi. Endi qo'shiladi.
-                                </p>
+                                    </p>
                                 </li>
                             </ul>
                         </SidebarNav>

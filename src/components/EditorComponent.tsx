@@ -1,16 +1,17 @@
-import React, {useRef, useState, ReactNode} from 'react'
+import React, { useRef, useState, ReactNode } from 'react'
 import * as parseUtils from "../utils/parseUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "./svg/CopyHTMLContentSVG"
 import CopyTextContentSVG from "./svg/CopyTextContentSVG"
 // import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
-import IconHandRightArrowSVG from "./svg/IconHandRightArrowSVG"
+import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
 import IconTrashSVG from "./svg/IconTrashSVG"
 import LatinEditorComponent from "./editor/LatinEditorComponent"
 import CrylicEditorComponent from "./editor/CrylicEditorComponent"
-import {MainConfigContext, ISettings} from "../containers/HomeContainer"
+import { MainConfigContext, ISettings } from "../containers/HomeContainer"
 import IconUnderlineSVG from "./svg/IconUnderlineSVG"
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
+import { Button } from 'react-native';
 
 interface IContentObject {
     htmlContent: string,
@@ -33,6 +34,33 @@ const EditorWrap = styled.div`
               .editable{
                 height: 300px;
               }
+        }
+     }
+     
+    &.page-layout{
+        position:relative;
+        margin:-17px 0 0;
+        .editable-box{
+              width:100% !important;
+              margin:0;
+              .editable{
+                height:auto;
+                min-height:460px;
+                font-size:25px;
+                margin:0 !important;
+                padding: 40px;
+                /*background:transparent;*/
+                box-shadow: none;
+                border:none;
+              }
+        }
+        .btn-page-convert{
+            position:fixed;
+            top:40%;
+            right: 0;
+            background:transparent;
+            color: #999;
+            text-align:center;
         }
      }
      
@@ -59,7 +87,7 @@ const EditorWrap = styled.div`
     [contenteditable=true]:empty:before{
         content: attr(placeholder);
         display: block; 
-        color:#ccc;
+        color:#a5a5a5;
     }
 `;
 export default function EditorComponent() {
@@ -67,11 +95,11 @@ export default function EditorComponent() {
     const crylicEditor: any = useRef<string>("");
     const [latinValue, setLatinValue] = useState<string>("")
     const [crylicValue, setCrylicValue] = useState<string>("")
-    const [latinObj, setLatinObj] = useState<IContentObject>({htmlContent: "", textContent: ""})
-    const [crylicObj, setCrylicObj] = useState<IContentObject>({htmlContent: "", textContent: ""})
+    const [latinObj, setLatinObj] = useState<IContentObject>({ htmlContent: "", textContent: "" })
+    const [crylicObj, setCrylicObj] = useState<IContentObject>({ htmlContent: "", textContent: "" })
 
     const changeCrylicData = (htmlContent: string) => {
-        crylicEditor.current.innerHTML = htmlContent;
+        if (crylicEditor.current) crylicEditor.current.innerHTML = htmlContent;
         setCrylicValue(htmlContent)
         setCrylicObj({
             htmlContent,
@@ -80,7 +108,7 @@ export default function EditorComponent() {
     }
 
     const changeLatinData = (htmlContent: string) => {
-        latinEditor.current.innerHTML = htmlContent;
+        if (latinEditor.current) latinEditor.current.innerHTML = htmlContent;
         setLatinValue(htmlContent)
         setLatinObj({
             htmlContent,
@@ -129,36 +157,56 @@ export default function EditorComponent() {
         changeContentData("")
     }
 
-    const editorArray: ReactNode[] = [
-        <LatinEditorComponent
-            changeCrylicData={changeCrylicData}
-            changeLatinData={changeLatinData}
-            trashListener={trashListener}
-            copyListener={copyListener}
-            latinObj={latinObj}
-            setLatinObj={setLatinObj}
-            latinValue={latinValue}
-            latinEditor={latinEditor}
-        />,
-        <CrylicEditorComponent
-            changeCrylicData={changeCrylicData}
-            changeLatinData={changeLatinData}
-            trashListener={trashListener}
-            copyListener={copyListener}
-            crylicObj={crylicObj}
-            setCrylicObj={setCrylicObj}
-            crylicValue={crylicValue}
-            crylicEditor={crylicEditor}
-        />
-    ]
     return (
         <MainConfigContext.Consumer>
-            {(config: ISettings) => (
-                <EditorWrap className={config.verticalLayout ? 'vertical-layout' : ''}>
-                    {config.latinFirst ? editorArray.shift() : editorArray.pop()}
-                    {editorArray[0]}
-                </EditorWrap>
-            )}
+            {([config, setConfig]) => {
+
+                const editorArray: ReactNode[] = [
+                    <LatinEditorComponent
+                        changeCrylicData={changeCrylicData}
+                        changeLatinData={changeLatinData}
+                        trashListener={trashListener}
+                        copyListener={copyListener}
+                        latinObj={latinObj}
+                        setLatinObj={setLatinObj}
+                        latinValue={latinValue}
+                        latinEditor={latinEditor}
+                    />,
+                    <CrylicEditorComponent
+                        changeCrylicData={changeCrylicData}
+                        changeLatinData={changeLatinData}
+                        trashListener={trashListener}
+                        copyListener={copyListener}
+                        crylicObj={crylicObj}
+                        setCrylicObj={setCrylicObj}
+                        crylicValue={crylicValue}
+                        crylicEditor={crylicEditor}
+                    />]
+
+                const convertListener = (e: any) => {
+                    if (crylicEditor.current) crylicEditor.current.focus();
+                    if (latinEditor.current) latinEditor.current.focus();
+                    setConfig({
+                        ...config,
+                        visibleEditorIndex: Number(!config.visibleEditorIndex)
+                    })
+                }
+                return config.pageLayout ? (
+                    <EditorWrap className={'page-layout'}>
+                        {config.visibleEditorIndex === 0 && editorArray[Number(!config.latinFirst)]}
+                        {config.visibleEditorIndex === 1 && editorArray[Number(config.latinFirst)]}
+                        {config.pageLayout && <button className="btn btn-page-convert" onClick={convertListener}>
+                            <IconHandLeftArrowSVG size={48} color="#5983e8"/> <br/>
+                            O'girish
+                        </button>}
+                    </EditorWrap>
+                ) : (
+                        <EditorWrap className={config.verticalLayout ? 'vertical-layout' : config.pageLayout ? 'page-layout' : ''}>
+                            {editorArray[Number(!config.latinFirst)]}
+                            {editorArray[Number(config.latinFirst)]}
+                        </EditorWrap>
+                    )
+            }}
         </MainConfigContext.Consumer>
     )
 } 
