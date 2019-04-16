@@ -18,7 +18,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+a{
+  color:#5983e8;
+  cursor: pointer;
+}
 .hide{
   display: none;
 }

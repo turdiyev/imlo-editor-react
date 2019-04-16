@@ -2,10 +2,11 @@ import React, { ReactNode, useState } from 'react'
 import styled from "styled-components"
 import IconSpellCheckSVG from "../../components/svg/IconSpellCheckSVG"
 import IconSettingsSVG from "../../components/svg/IconSettingsSVG"
+import LogoComponent from '../../components/LogoComponent';
 
 interface IProps {
     children: ReactNode,
-    settingsClickListener: (e:any) => void
+    settingsClickListener: (e: any) => void
 }
 
 const Layout = styled.div`
@@ -25,16 +26,6 @@ const Nav = styled.nav`
 
     box-shadow: 0 1px 5px rgba(0,0,0,0.05);
 
-    h2{
-        margin:0;
-        flex:1;
-        .logo-box{
-            background:rgba(255,255,255,0.8);
-            padding:10px 15px;
-            display:inline-block;
-        }
-    }
-
     .btn{
         border:none;
         background:none;
@@ -42,20 +33,34 @@ const Nav = styled.nav`
     }
 `
 
+const Footer = styled.footer`
+    padding:5px 15px;
+    text-align:center;
+
+    .footer-menu {
+        li{
+            display:inline;
+            margin:0 10px;
+        }   
+    }
+`
+
 export default function MainLayout({ children, settingsClickListener }: IProps) {
     return (
         <Layout>
             <Nav>
-                <h2>
-                    <div className="logo-box">
-                        <IconSpellCheckSVG size={24} color="#5983e8" /> Imlo Editor
-                    </div>
-                </h2>
+                <LogoComponent />
                 <button className="btn" onClick={settingsClickListener}>
                     <IconSettingsSVG color="white" />
                 </button>
             </Nav>
             {children}
+            <Footer>
+                <ul className="footer-menu list">
+                    <li><a>Loyiha haqida</a></li>
+                    <li><a>Loyiha haqida</a></li>
+                </ul>
+            </Footer>
         </Layout>
     )
 }

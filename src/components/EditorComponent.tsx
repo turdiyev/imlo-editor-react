@@ -52,54 +52,6 @@ const EditorWrap = styled.div`
     
 
 `;
-
-const EditorHeader = styled.div`
-    background:  rgba(0,0,0,0.1);
-    padding:5px;
-
-    .btn{
-        border:1px solid rgba(0,0,0,0.05);
-        background:#fff;   
-        padding:5px 7px 3px; 
-    }
-`
-
-const EditorFooter = styled.div`
-    margin-top:2px;  
-    color: #999;
-    padding:2px;
-    background: rgba(0,0,0,0.04);
-    display:flex;
-    font-size: 11px;
-
-    .count-info{
-        padding:10px;
-        flex:1;
-    }
-    .action-box .btn{
-        border: 1px solid transparent;
-        padding: 3px 6px 4px;
-        text-align:center;
-        border-radius: 3px;
-        margin:2px;
-        /*background: linear-gradient(120deg, #00e4d0, #5983e8);*/
-        background:rgba(0,0,0,0.05);
-        transition: all ease  1s
-    }
-
-    .action-box .btn svg{
-        vertical-align:sub;
-    }
-    .action-box .btn-convert{
-        /*color:#5983e8;
-        font-size:12px !important;
-        border: 1px solid #5983e8;*/
-    }
-    .action-box .btn:hover{
-        border: 1px solid #666;
-        background: white;
-    }
-`
 export default function EditorComponent() {
     const latinEditor: any = useRef<string>("");
     const crylicEditor: any = useRef<string>("");
