@@ -140,8 +140,8 @@ export default function HomeContainer() {
                                         width={32}
                                     />
                                 </li>
-                                <li className="disabled">
-                                    <IconVerticalViewSVG size={24} color="#ccc" />  <span>Vertical Joylashuv</span>
+                                <li>
+                                    <IconVerticalViewSVG size={24} />  <span>Vertical Joylashuv</span>
                                     <Switch
                                         onChange={checked => setConfig({ ...config, verticalLayout: checked })}
                                         checked={config.verticalLayout}
@@ -154,7 +154,6 @@ export default function HomeContainer() {
                                         activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
                                         height={15}
                                         width={32}
-                                        disabled
                                     />
                                 </li>
                                 <li className="disabled">

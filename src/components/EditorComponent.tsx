@@ -1,4 +1,4 @@
-import React, { useRef, useState, ReactNode } from 'react'
+import React, {useRef, useState, ReactNode} from 'react'
 import * as parseUtils from "../utils/parseUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "./svg/CopyHTMLContentSVG"
@@ -8,13 +8,15 @@ import IconHandRightArrowSVG from "./svg/IconHandRightArrowSVG"
 import IconTrashSVG from "./svg/IconTrashSVG"
 import LatinEditorComponent from "./editor/LatinEditorComponent"
 import CrylicEditorComponent from "./editor/CrylicEditorComponent"
-import { MainConfigContext, ISettings } from "../containers/HomeContainer"
+import {MainConfigContext, ISettings} from "../containers/HomeContainer"
 import IconUnderlineSVG from "./svg/IconUnderlineSVG"
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
+
 interface IContentObject {
     htmlContent: string,
     textContent: string
 }
+
 const EditorWrap = styled.div`
     display:flex;
     margin: 10px;
@@ -24,9 +26,20 @@ const EditorWrap = styled.div`
             width:100% !important;
         }
     }
+    &.vertical-layout{
+         flex-direction:column;
+        .editable-box{
+              width:100% !important;
+              .editable{
+                height: 300px;
+              }
+        }
+     }
+     
     .editable-box{
         width:50%;
         margin:2px 2px 15px;
+        
     }
     .editable{
         display:block;
@@ -48,17 +61,14 @@ const EditorWrap = styled.div`
         display: block; 
         color:#ccc;
     }
-
-    
-
 `;
 export default function EditorComponent() {
     const latinEditor: any = useRef<string>("");
     const crylicEditor: any = useRef<string>("");
     const [latinValue, setLatinValue] = useState<string>("")
     const [crylicValue, setCrylicValue] = useState<string>("")
-    const [latinObj, setLatinObj] = useState<IContentObject>({ htmlContent: "", textContent: "" })
-    const [crylicObj, setCrylicObj] = useState<IContentObject>({ htmlContent: "", textContent: "" })
+    const [latinObj, setLatinObj] = useState<IContentObject>({htmlContent: "", textContent: ""})
+    const [crylicObj, setCrylicObj] = useState<IContentObject>({htmlContent: "", textContent: ""})
 
     const changeCrylicData = (htmlContent: string) => {
         crylicEditor.current.innerHTML = htmlContent;
@@ -144,7 +154,7 @@ export default function EditorComponent() {
     return (
         <MainConfigContext.Consumer>
             {(config: ISettings) => (
-                <EditorWrap>
+                <EditorWrap className={config.verticalLayout ? 'vertical-layout' : ''}>
                     {config.latinFirst ? editorArray.shift() : editorArray.pop()}
                     {editorArray[0]}
                 </EditorWrap>
