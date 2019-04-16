@@ -86,14 +86,16 @@ const ModalWrap = styled.div`
         left: 0;
         right: 0;
         bottom: 0;
+        z-index:5;
     }
     
     .modal {
         position: fixed;
         width: 500px;
-        height: 380px;
+        height: 480px;
         top:50%;
-        margin-top:-200px;
+        z-index:5;
+        margin-top:-270px;
         background: white;
         border-radius: 10px;
         padding:20px;
@@ -105,6 +107,7 @@ const ModalWrap = styled.div`
             border-bottom:1px solid #dedede;
             display:flex;
             align-items: center;
+            padding-bottom:3px;
         }
         section{
             padding:1px 0;
@@ -140,15 +143,22 @@ export default function MainLayout({ children, settingsClickListener }: IProps) 
                                 <LogoComponent />
                             </header>
                             <section>
-                                <p><i>Ilova versiyasi:</i> <span>v1.0.0</span></p>
+                                <p><i>Ilova versiyasi:</i> <span>v1.0.1</span></p>
                                 <p><i>Sana:</i> <span>16.04.2019</span></p>
-                                <p><i>Imkoniyatlari:</i> <span>
-                                    - Kirildan-Lotinga va Lotindan-Kirilga oʻgirish <br />
-                                    - Editorni joylashuv tartibini sozlash <br />
-                                    - Bufferga HTML va faqat matn qismini olish <br />
-                                    - Editorni tozalash <br />
-                                    - Belgilarni sanash
-                                    </span></p>
+                                <p><i>Imkoniyatlari:</i>
+                                    <span>
+                                        <b>v1.0.0 (16.04.2019)</b> <br />
+                                        - Kirildan-Lotinga va Lotindan-Kirilga oʻgirish <br />
+                                        - Editorni joylashuv tartibini sozlash <br />
+                                        - Bufferga HTML va faqat matn qismini olish <br />
+                                        - Editorni tozalash <br />
+                                        - Belgilarni sanash<br />
+                                        <b>v1.0.1 (17.04.2019) </b><br />
+                                        - Google Analytics sozlanmasi<br />
+                                        - Vertikal joylashuvi<br />
+                                        - Matnlarni alohida joylashuvi<br />
+                                    </span>
+                                </p>
                                 <p><i>Asosiy maqsad:</i> <span>Oʻzbek tilidagi imloviy toʻgʻri soʻzlarni toʻplab, matnlardagi imloviy xatolarini aniqlash va ularni toʻgʻrilash.</span></p>
                                 <p><i>Ilova muallifi:</i> <span>Sherali Turdiyev.</span></p>
                                 <p><i>Bogʻlanish:</i> <span>Telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>.</span></p>
@@ -173,7 +183,7 @@ export default function MainLayout({ children, settingsClickListener }: IProps) 
                                     <li>Imkoniyatlarini solishtirishda <a href="https://savodxon.uz">Savodxon.uz</a> bilan test qilindi.</li>
                                     <li><a href="https://google.com">Google</a> va <a href="https://stackoverflow.com/">Stackoverflow</a> ni aytmasa ham bo'ladi 😄 .</li>
                                 </ol>
-                                <div style={{marginTop: 15}}>Iltimos, xato topsangiz, zudlik bilan telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>ga yozing. Biz ushbu ilovani optimallashtirib boraveramiz, Xudo xohlasa.</div>  
+                                <div style={{ marginTop: 15 }}>Iltimos, xato topsangiz, zudlik bilan telegramda <a href="https://t.me/sheralijon">@Sheralijon</a>ga yozing. Biz ushbu ilovani optimallashtirib boraveramiz, Xudo xohlasa.</div>
                             </section>
                         </Modal>
                     ]}
