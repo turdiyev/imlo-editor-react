@@ -123,6 +123,7 @@ export default function LatinEditorComponent({ latinEditor, latinObj, latinValue
                     </button>
                 </div>
             </EditorFooter>
+            {parseUtils.clearLatinContent(latinObj.textContent)}
         </div>
     )
 } 

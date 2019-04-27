@@ -116,28 +116,6 @@ export default function EditorComponent() {
         })
     }
 
-    const latinContentListener = (htmlContent: string) => {
-        // let htmlContent = e.target.innerHTML;
-        setLatinObj({
-            htmlContent: htmlContent,
-            textContent: parseUtils.clearHTMLContent(htmlContent)
-        })
-
-        htmlContent += "<";
-
-        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
-            (all: string, b: string, c: string, f: string): string => {
-                let parsed_str = parseUtils.parseToCrylic(c);
-                parsed_str = parsed_str.replace(/&([^;]+);/g, (all, first) =>
-                    "&" + parseUtils.parseToLatin(first) + ";")
-                return String(b + parsed_str + f);
-            })
-        htmlContent = htmlContent.slice(0, -1);
-        changeCrylicData(htmlContent)
-
-    }
-
-
     const copyListener = (text: string, section: string = "Lotincha matn") => {
         if (text) {
             const nvgtr: any = window.navigator;

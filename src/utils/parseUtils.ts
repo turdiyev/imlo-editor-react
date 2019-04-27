@@ -24,22 +24,21 @@ export const clearHTMLContent = (content: string) => {
     // .replace(/([\d\,\.\\\/\’\"\”\“\«\»\%\?\_\+\=\!\:\;\]\[\{\}\(\)\*\•\✅])/g, ' ')
 
     return trim(content)
-        .replace(/<[^>]+>/g, '')
+        .replace(/<[^>]+>/g, ' ')
         .replace(/&[^;]+;/g, ' ')
         .replace(/\–\—\-/g, '-')
         .replace(/\s{2,}/g, " ")
 }
 
 export const clearLatinContent = (content: string) => {
-    // const lower_content = content.toLowerCase();cleaned_content
-    // .replace(/([\d\,\.\\\/\’\"\”\“\«\»\%\?\_\+\=\!\:\;\]\[\{\}\(\)\*\•\✅])/g, ' ')
 
     return trim(content)
-        .replace(/[^a-zA-Z\'\`\ʼ\ʻ\‘\'\-\s]/g, ' ')
-        .replace(/[\u0400-\u04FF]/g, '')
+        .replace(/['`ʼʻ‘']/g, 'ʻ')
+        .replace(/[^a-zA-Zʻ-\s]/g, ' ')
+        .replace(/[\u0400-\u04FF]/g, ' ')
         .replace(/\–\—\-/g, '-')
-        .replace(/\s{2,}/g, " ")
-        .replace(/\B-?([\w]+\-?[\w]+)-?\B/g, "$1");
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\B-?([\w]+\-?[\w]+)-?\B/g, "$1")
 }
 
 export const parseLatinAsSlug = (string: string) => {
@@ -137,41 +136,4 @@ export const parseToCrylic = (latin_text: string = ""): string => {
         return String(first + 'ъ' + second)
     })
     return result_text;
-}
-
-const test_array = [
-    ["елкан", "yelkan"],
-    ["Елкан", "Yelkan"],
-    ["ер", "yer"],
-    ["Ер", "Yer"],
-    ["Шерзод Шерматов", "Sherzod Shermatov"],
-    ["бюджети", "byudjeti"],
-    ["Назарбоевнинг", "Nazarboyevning"],
-    ["Мирзиёев", "Mirziyoyev"],
-    ["ечим", "yechim"],
-    ["сентябр", "sentyabr"],
-    ["Кенгашнинг", "Kengashning"],
-    ["сессиясида", "sessiyasida"],
-    ["ўзбек", "oʻzbek"],
-    ["деган", "degan"],
-    ["неча", "necha"],
-    ["белгиланган", "belgilangan"],
-    ["мўътабар", "moʻtabar"],
-    ["мўъжиза", "moʻjiza"],
-    ["исҳоқ", "is'hoq"],
-]
-export const testParseLatin = () => {
-    return test_array.map(ar => ({
-        ok: parseToLatin(ar[0]) == ar[1],
-        parsed: parseToLatin(ar[0]),
-        origin: ar[1]
-    }))
-}
-
-export const testParseCrylic = () => {
-    return test_array.map(ar => ({
-        ok: parseToCrylic(ar[1]) == ar[0],
-        parsed: parseToCrylic(ar[1]),
-        origin: ar[0]
-    }))
 }
