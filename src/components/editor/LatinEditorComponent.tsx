@@ -1,4 +1,4 @@
-import React, { useRef, useState, Ref } from 'react'
+import React, {useRef, useState, Ref} from 'react'
 import * as parseUtils from "../../utils/parseUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "./../svg/CopyHTMLContentSVG"
@@ -6,14 +6,15 @@ import CopyTextContentSVG from "../svg/CopyTextContentSVG"
 // import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
 import IconHandRightArrowSVG from "../svg/IconHandRightArrowSVG"
 import IconTrashSVG from "../svg/IconTrashSVG"
-import { MainConfigContext, ISettings } from "../../containers/HomeContainer"
+import {MainConfigContext, ISettings} from "../../containers/HomeContainer"
 import IconUnderlineSVG from "../svg/IconUnderlineSVG"
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
 interface IContentObject {
     htmlContent: string,
     textContent: string
 }
+
 interface IProps {
     changeCrylicData: (s: string) => void,
     changeLatinData: (s: string) => void,
@@ -24,6 +25,7 @@ interface IProps {
     latinValue: string,
     latinEditor: any
 }
+
 const EditorHeader = styled.div`
     background:  rgba(0,0,0,0.1);
     padding:5px;
@@ -71,10 +73,12 @@ const EditorFooter = styled.div`
         background: white;
     }
 `
-export default function LatinEditorComponent({ latinEditor, latinObj, latinValue, setLatinObj,
-    changeCrylicData, changeLatinData, trashListener, copyListener }: IProps) {
-        
-        
+export default function LatinEditorComponent({
+                                                 latinEditor, latinObj, latinValue, setLatinObj,
+                                                 changeCrylicData, changeLatinData, trashListener, copyListener
+                                             }: IProps) {
+
+
     const latinContentListener = (htmlContent: string) => {
         // let htmlContent = e.target.innerHTML;
         setLatinObj({
@@ -96,34 +100,51 @@ export default function LatinEditorComponent({ latinEditor, latinObj, latinValue
 
     }
 
+    const onlyText = parseUtils.clearLatinContent(latinObj.textContent);
+    const allWords = onlyText.split(" ");
     return (
         <div className='editable-box'>
             <div ref={latinEditor}
-                contentEditable={true}
-                className="editable latin-editor"
-                placeholder="Lotincha matn..."
-                onKeyUp={(e: any) => latinContentListener(e.target.innerHTML)}
-                onFocus={(e: any) => latinContentListener(e.target.innerHTML)}
-                dangerouslySetInnerHTML={{ __html: latinValue }}
+                 contentEditable={true}
+                 className="editable latin-editor"
+                 placeholder="Lotincha matn..."
+                 onKeyUp={(e: any) => latinContentListener(e.target.innerHTML)}
+                 onFocus={(e: any) => latinContentListener(e.target.innerHTML)}
+                 dangerouslySetInnerHTML={{__html: latinValue}}
             >
             </div>
             <EditorFooter>
                 <div className="count-info">
                     Lotincha matn: {latinObj.textContent.length} ta belgi
-                        </div>
+                </div>
                 <div className="action-box">
                     <button className="btn" onClick={e => trashListener(changeLatinData)}>
-                        <IconTrashSVG title="Тозалаш" color="#666" />
+                        <IconTrashSVG title="Тозалаш" color="#666"/>
                     </button>
                     <button className="btn" onClick={e => copyListener(latinObj.htmlContent, "Kirilcha HTML-kontenti")}>
-                        <CopyHTMLContentSVG title="To'liq(HTML bilan) nusxalash" color="#666" />
+                        <CopyHTMLContentSVG title="To'liq(HTML bilan) nusxalash" color="#666"/>
                     </button>
-                    <button className="btn" onClick={e => copyListener(latinObj.textContent, "Kirilcha matni(HTML siz)")}>
-                        <CopyTextContentSVG title="Faqat matnni nusxalash" />
+                    <button className="btn"
+                            onClick={e => copyListener(latinObj.textContent, "Kirilcha matni(HTML siz)")}>
+                        <CopyTextContentSVG title="Faqat matnni nusxalash"/>
                     </button>
                 </div>
             </EditorFooter>
-            {parseUtils.clearLatinContent(latinObj.textContent)}
+            <table>
+                <tr>
+                    <th>So'z</th>
+                    <th>Slug</th>
+                    <th>Natijaviy</th>
+                </tr>
+                {allWords.map((word:string, index:number) => (
+                    <tr key={index}>
+                        <td>{word}</td>
+                        <td>{parseUtils.parseLatinAsSlug(word)}</td>
+                        <td>{parseUtils.getOnlyWords(word)}</td>
+                    </tr>
+                ))}
+            </table>
+            {onlyText}
         </div>
     )
 } 

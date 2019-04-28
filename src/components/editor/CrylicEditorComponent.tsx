@@ -83,6 +83,8 @@ export default function CrylicEditorComponent({ crylicEditor, crylicObj, crylicV
     }
 
 
+    const onlyText = parseUtils.clearCrylicContent(crylicObj.textContent);
+    const allWords = onlyText.split(" ");
     return (
         <div className='editable-box'>
             <div ref={crylicEditor}
@@ -112,6 +114,22 @@ export default function CrylicEditorComponent({ crylicEditor, crylicObj, crylicV
                     </button>
                 </div>
             </EditorFooter>
+
+            <table>
+                <tr>
+                    <th>So'z</th>
+                    <th>Slug</th>
+                    <th>Natijaviy</th>
+                </tr>
+                {allWords.map((word:string, index:number) => (
+                    <tr key={index}>
+                        <td>{word}</td>
+                        <td>{parseUtils.parseToLatinSlug(word)}</td>
+                        <td>{parseUtils.getOnlyWords(word)}</td>
+                    </tr>
+                ))}
+            </table>
+            {onlyText}
         </div>
     )
 } 
