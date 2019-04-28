@@ -7,7 +7,7 @@ export const CRYLIC_MAP: Map<{}, {}> = new Map(CRYLIC_LETTER_PAIRS)
 export const LATIN_MAP: Map<{}, {}> = new Map(LATIN_LETTER_PAIRS)
 import {toLower, trim} from "lodash"
 
-export const RUSSION_YU_LETTER_TERMS: ReadonlyArray<[{}, {}]> = [
+export const RUSSIAN_YU_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     ["ключ", "kluch"],
     ["бюджет", "budjet"], ["костюм", "kastum"],
     ["бюллетень", "bulleten"], ["Людмила", "Ludmila"],
@@ -25,7 +25,7 @@ export const RUSSION_YU_LETTER_TERMS: ReadonlyArray<[{}, {}]> = [
     ["коляска", "kolaska"], ["сюита", "suita"],
 ];
 
-export const RUSSION_ь_LETTER_TERMS: ReadonlyArray<[{}, {}]> = [
+export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
 
     ["хмель", "xmel"],
     ["холодильник", "xolodilnik"],
@@ -69,9 +69,9 @@ export const RUSSION_ь_LETTER_TERMS: ReadonlyArray<[{}, {}]> = [
     ["Октябрь", "Oktabr"], ["Ноябрь", "Noyabr"], ["Декабрь", "Dekabr"]
 ]
 
-export const RUSSION_TERMS = new Map([
-        ...RUSSION_YU_LETTER_TERMS,
-        ...RUSSION_ь_LETTER_TERMS
+export const RUSSIAN_TERMS: Map<string, string> = new Map([
+        ...RUSSIAN_YU_LETTER_TERMS,
+        ...RUSSIAN_ь_LETTER_TERMS
     ]
 );
 export const clearCrylicContent = (content: string) => {
@@ -117,12 +117,30 @@ export const parseLatinAsSlug = (string: string) => {
     return string;
 }
 
+export const parseRussianTermsToLatin = (crylic_text: string): string => {
+    RUSSIAN_TERMS.forEach((value: string, key: string) => {
+        crylic_text = crylic_text.replace(new RegExp(key, 'ig'), value)
+    })
+    return crylic_text;
+}
+
+export const parseRussianTermsToCrylic = (latin_text: string): string => {
+    RUSSIAN_TERMS.forEach((value: string, key: string) => {
+        latin_text = latin_text.replace(new RegExp(value, 'ig'), key);
+    });
+
+    return latin_text;
+}
+
 export const parseToLatin = (crylic_text: string = ""): string => {
     let result_text: string = ""
+
+    crylic_text = parseRussianTermsToLatin(crylic_text)
 
     crylic_text = crylic_text.replace(/([с])ҳ/ig, '$1ʼh')
     crylic_text = crylic_text.replace(/([ў])ъ/ig, '$1')
     crylic_text = crylic_text.replace(/([ь]е)/ig, '$1e')
+
     crylic_text.split("").map((letter: string) => {
         const parsed_letter = CRYLIC_MAP.get(letter);
         result_text += typeof parsed_letter == "string" ? parsed_letter : letter;
@@ -140,6 +158,12 @@ export const parseToLatinSlug = (crylic_text: string): string => {
 }
 export const parseToCrylic = (latin_text: string = ""): string => {
     let result_text: string = ""
+
+    latin_text = parseRussianTermsToCrylic(latin_text)
+
+    RUSSIAN_TERMS.forEach((value: string, key: string) => {
+        latin_text = latin_text.replace(new RegExp(value, 'ig'), key);
+    });
 
     latin_text = latin_text.replace(/\b([e])/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'i'))
