@@ -7,7 +7,7 @@ export const CRYLIC_MAP: Map<{}, {}> = new Map(CRYLIC_LETTER_PAIRS)
 export const LATIN_MAP: Map<{}, {}> = new Map(LATIN_LETTER_PAIRS)
 import {toLower, trim} from "lodash"
 
-export const RUSSIAN_YU_LETTER_TERMS: ReadonlyArray<[string, string]> = [
+export const RUSSIAN_YO_YU_YE_YA_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     ["ключ", "kluch"],
     ["бюджет", "budjet"], ["костюм", "kastum"],
     ["бюллетень", "bulleten"], ["Людмила", "Ludmila"],
@@ -23,10 +23,11 @@ export const RUSSIAN_YU_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     ["клёш", "klosh"], ["салют", "salut"],
     ["клюква", "klukva"], ["сюжет", "sujet"],
     ["коляска", "kolaska"], ["сюита", "suita"],
+    ["стажёр", "stajor"], ["люстра", "lustra"],
+    ["фляга", "flagа"]
 ];
 
 export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
-
     ["хмель", "xmel"],
     ["холодильник", "xolodilnik"],
     ["альманах", "almanax"],
@@ -63,15 +64,26 @@ export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     ["Нобель", "Nobel"],
     ["Беларусь", "Belarus"],
     ["фильм", "film"],
+    ["цоколь", "sokol"],
+    ["циркуль", "sirkul"],
 
     ["Январь", "Yanvar"], ["Февраль", "Fevral"],
     ["Апрель", "Aprel"], ["Июнь", "Iyun"], ["Июль", "Iyul"], ["Сентябрь", "Sentabr"],
     ["Октябрь", "Oktabr"], ["Ноябрь", "Noyabr"], ["Декабрь", "Dekabr"]
 ]
 
+export const RUSSIAN_TS_LETTER_TERMS: ReadonlyArray<[string, string]> = [
+    ["кварц", "kvars"], ["шприц", "shpris"], ["целлофан", "sellofan"], ["цилиндр", "silindr"], ["антициклон", "antisiklon"], ["конструкция", "konstruksiya"],
+    ["глицирин", "glitserin"], ["гербицит", "gerbitsid"],
+    ["цех", "sex"], ["цирк", "sirk"], ["акция", "aksiya"],
+    ["лицей", "litsey"], ["офицер", "ofitser"], ["доцент", "dotsent"],
+    ["цанга", "sanga"], ["цапфа", "sapfa"], ["цедра", "sedra"], ["целом", "selom"], ["цент", "sent"], ["ценз", "senz"], ["церий", "seriy"], ["цеце", "setse"], ["цезура", "sezura"], ["цинга", "singa"], ["цинния", "sinniya"], ["циркуль", "sirkul"], ["цирроз", "sirroz"], ["циста", "sista"], ["цоколь", "sokol"]
+]
+
 export const RUSSIAN_TERMS: Map<string, string> = new Map([
-        ...RUSSIAN_YU_LETTER_TERMS,
-        ...RUSSIAN_ь_LETTER_TERMS
+        ...RUSSIAN_YO_YU_YE_YA_LETTER_TERMS,
+        ...RUSSIAN_ь_LETTER_TERMS,
+        ...RUSSIAN_TS_LETTER_TERMS
     ]
 );
 export const clearCrylicContent = (content: string) => {
@@ -125,6 +137,9 @@ export const parseRussianTermsToLatin = (crylic_text: string): string => {
 }
 
 export const parseRussianTermsToCrylic = (latin_text: string): string => {
+    // RUSSIAN_TS_LETTER_TERMS.forEach((itemArr: string[]) => {
+    //     latin_text = latin_text.replace(new RegExp(itemArr[1], 'ig'), itemArr[0]);
+    // })
     RUSSIAN_TERMS.forEach((value: string, key: string) => {
         latin_text = latin_text.replace(new RegExp(value, 'ig'), key);
     });
@@ -140,6 +155,7 @@ export const parseToLatin = (crylic_text: string = ""): string => {
     crylic_text = crylic_text.replace(/([с])ҳ/ig, '$1ʼh')
     crylic_text = crylic_text.replace(/([ў])ъ/ig, '$1')
     crylic_text = crylic_text.replace(/([ь]е)/ig, '$1e')
+    crylic_text = crylic_text.replace(/([иуўоае])ц([иуўоае])/ig, '$1ts$1')
 
     crylic_text.split("").map((letter: string) => {
         const parsed_letter = CRYLIC_MAP.get(letter);
@@ -169,6 +185,7 @@ export const parseToCrylic = (latin_text: string = ""): string => {
         return String(LATIN_MAP.get(first + 'i'))
     })
     latin_text = latin_text.replace(/([aeiuo])e/ig, '$1э')
+    latin_text = latin_text.replace(/ts/g, 'ц')
 
     latin_text = latin_text.replace(/([y])e/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'e'))
