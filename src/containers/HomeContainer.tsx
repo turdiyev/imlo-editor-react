@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import MainLayout from './layout/MainLayout'
 import EditorComponent from '../components/EditorComponent'
 import IconCircleCloseSVG from "../components/svg/IconCircleCloseSVG"
@@ -6,6 +6,8 @@ import IconTabSVG from "../components/svg/IconTabSVG"
 import IconStatisticChartSVG from "../components/svg/IconStatisticChartSVG"
 import IconVerticalViewSVG from "../components/svg/IconVerticalViewSVG"
 import IconPageLayoutViewSVG from "../components/svg/IconPageLayoutViewSVG"
+import {LATIN_IMLO_DICT} from "../constants/latinWords"
+import {WordObject} from "../type/WordObjectType"
 import posed from 'react-pose'
 import styled from 'styled-components'
 import Switch from "react-switch";
@@ -14,8 +16,8 @@ import IconSettingsSVG from "../components/svg/IconSettingsSVG"
 import useLocalStorage from '../hooks/useLocalStorage';
 
 const ConfigSidebar = posed.div({
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
+    hidden: {opacity: 0},
+    visible: {opacity: 1},
     exit: {
         x: '200%'
     },
@@ -112,29 +114,34 @@ export const MainConfigContext = React.createContext<[ISettings, any]>([initialC
 export default function HomeContainer() {
     const [sidebarVisible, setSidebarVisible] = useState<boolean>(false);
     const [config, setConfig] = useLocalStorage<ISettings>("editor_config", initialConfig);
-
+    const hundredWords: WordObject[] = LATIN_IMLO_DICT.slice(0, 100);
     return (
-        <MainConfigContext.Provider value={[config, setConfig ]}>
+        <MainConfigContext.Provider value={[config, setConfig]}>
             <MainLayout settingsClickListener={(e: any) => setSidebarVisible(!sidebarVisible)}>
 
                 <EditorComponent
 
                 />
+                <ol>
+                    {hundredWords.map((item: WordObject, index: number) => (
+                        <li>{item.word} - {item.info}</li>
+                    ))}
+                </ol>
 
                 <HomeSidebar>
                     <ConfigSidebar className="settings-sidebar" pose={sidebarVisible ? 'enter' : 'exit'}>
                         <header>
-                            <h3><IconSettingsSVG color="#999" /> Sozlash</h3>
+                            <h3><IconSettingsSVG color="#999"/> Sozlash</h3>
                             <button className="btn" onClick={e => setSidebarVisible(false)}>
-                                <IconCircleCloseSVG color="#999" />
+                                <IconCircleCloseSVG color="#999"/>
                             </button>
                         </header>
                         <SidebarNav>
                             <ul className="list">
                                 <li>
-                                    <IconTabSVG size={24} /> <span>Lotin matni 1-tursin</span>
+                                    <IconTabSVG size={24}/> <span>Lotin matni 1-tursin</span>
                                     <Switch
-                                        onChange={checked => setConfig({ ...config, latinFirst: checked })}
+                                        onChange={checked => setConfig({...config, latinFirst: checked})}
                                         checked={config.latinFirst}
                                         onColor="#86d3ff"
                                         onHandleColor="#2693e6"
@@ -148,7 +155,7 @@ export default function HomeContainer() {
                                     />
                                 </li>
                                 <li>
-                                    <IconVerticalViewSVG size={24} /> <span>Vertical Joylashuv</span>
+                                    <IconVerticalViewSVG size={24}/> <span>Vertical Joylashuv</span>
                                     <Switch
                                         onChange={checked => setConfig({
                                             ...config,
@@ -168,7 +175,7 @@ export default function HomeContainer() {
                                     />
                                 </li>
                                 <li>
-                                    <IconPageLayoutViewSVG size={24} /> <span>Alohida matn Joylashuvi</span>
+                                    <IconPageLayoutViewSVG size={24}/> <span>Alohida matn Joylashuvi</span>
                                     <Switch
                                         onChange={checked => setConfig({
                                             ...config,
@@ -189,9 +196,9 @@ export default function HomeContainer() {
                                     />
                                 </li>
                                 <li className="disabled">
-                                    <IconStatisticChartSVG size={24} color="#ccc" /> <span>Matn Statistikasi</span>
+                                    <IconStatisticChartSVG size={24} color="#ccc"/> <span>Matn Statistikasi</span>
                                     <Switch
-                                        onChange={checked => setConfig({ ...config, statsEnable: checked })}
+                                        onChange={checked => setConfig({...config, statsEnable: checked})}
                                         checked={config.statsEnable}
                                         onColor="#86d3ff"
                                         onHandleColor="#2693e6"
