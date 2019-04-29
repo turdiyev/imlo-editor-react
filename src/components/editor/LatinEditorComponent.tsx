@@ -8,12 +8,9 @@ import IconHandRightArrowSVG from "../svg/IconHandRightArrowSVG"
 import IconTrashSVG from "../svg/IconTrashSVG"
 import {MainConfigContext, ISettings} from "../../containers/HomeContainer"
 import IconUnderlineSVG from "../svg/IconUnderlineSVG"
-import {toast} from 'react-toastify';
-
-interface IContentObject {
-    htmlContent: string,
-    textContent: string
-}
+import {debounce, isEmpty} from 'lodash';
+import {IContentObject} from "../../type/EditorTypes";
+import LatinWordsTableComponent from "./LatinWordsTableComponent";
 
 interface IProps {
     changeCrylicData: (s: string) => void,
@@ -80,36 +77,37 @@ export default function LatinEditorComponent({
 
 
     const latinContentListener = (htmlContent: string) => {
-        // let htmlContent = e.target.innerHTML;
-        setLatinObj({
-            htmlContent: htmlContent,
-            textContent: parseUtils.clearHTMLContent(htmlContent)
-        })
+        if (!isEmpty(htmlContent)) {
+            const textContent = parseUtils.clearHTMLContent(htmlContent)
+            debugger;
+            if (isEmpty(textContent)) return;
 
-        htmlContent += "<";
+            console.log("Latin -> Kril ...................")
+            setLatinObj({htmlContent, textContent})
 
-        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
-            (all: string, b: string, c: string, f: string): string => {
-                let parsed_str = parseUtils.parseToCrylic(c);
-                parsed_str = parsed_str.replace(/&([^;]+);/g, (all: string, first: string) =>
-                    "&" + parseUtils.parseToLatin(first) + ";")
-                return String(b + parsed_str + f);
-            })
-        htmlContent = htmlContent.slice(0, -1);
-        changeCrylicData(htmlContent)
+            htmlContent += "<";
 
+            htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
+                (all: string, b: string, c: string, f: string): string => {
+                    let parsed_str = parseUtils.parseToCrylic(c);
+                    parsed_str = parsed_str.replace(/&([^;]+);/g, (all: string, first: string) =>
+                        "&" + parseUtils.parseToLatin(first) + ";")
+                    return String(b + parsed_str + f);
+                })
+            htmlContent = htmlContent.slice(0, -1);
+            changeCrylicData(htmlContent)
+        }
     }
 
-    const onlyText = parseUtils.clearLatinContent(latinObj.textContent);
-    const allWords = onlyText.split(" ");
+    const debouncedLatinListener = debounce(latinContentListener, 50)
     return (
         <div className='editable-box'>
             <div ref={latinEditor}
                  contentEditable={true}
                  className="editable latin-editor"
                  placeholder="Lotincha matn..."
-                 onKeyUp={(e: any) => latinContentListener(e.target.innerHTML)}
-                 onFocus={(e: any) => latinContentListener(e.target.innerHTML)}
+                 onKeyUp={(e: any) => debouncedLatinListener(e.target.innerHTML)}
+                 onFocus={(e: any) => debouncedLatinListener(e.target.innerHTML)}
                  dangerouslySetInnerHTML={{__html: latinValue}}
             >
             </div>
@@ -130,21 +128,7 @@ export default function LatinEditorComponent({
                     </button>
                 </div>
             </EditorFooter>
-            <table>
-                <tr>
-                    <th>So'z</th>
-                    <th>Slug</th>
-                    <th>Natijaviy</th>
-                </tr>
-                {allWords.map((word:string, index:number) => (
-                    <tr key={index}>
-                        <td>{word}</td>
-                        <td>{parseUtils.parseLatinAsSlug(word)}</td>
-                        <td>{parseUtils.getOnlyWords(word)}</td>
-                    </tr>
-                ))}
-            </table>
-            {onlyText}
+            {false && <LatinWordsTableComponent latinObj={latinObj}/>}
         </div>
     )
 } 

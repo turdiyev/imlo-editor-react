@@ -11,7 +11,7 @@ import CrylicEditorComponent from "./editor/CrylicEditorComponent"
 import { MainConfigContext, ISettings } from "../containers/HomeContainer"
 import IconUnderlineSVG from "./svg/IconUnderlineSVG"
 import { toast } from 'react-toastify';
-import { Button } from 'react-native';
+import { debounce} from 'lodash';
 
 interface IContentObject {
     htmlContent: string,

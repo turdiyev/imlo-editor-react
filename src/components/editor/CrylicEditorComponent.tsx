@@ -1,19 +1,18 @@
-import React, { useRef, useState, Ref } from 'react'
+import React, {useRef, useState, Ref} from 'react'
 import * as parseUtils from "../../utils/parseUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "../svg/CopyHTMLContentSVG"
 import CopyTextContentSVG from "../svg/CopyTextContentSVG"
-// import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
 import IconHandRightArrowSVG from "../svg/IconHandRightArrowSVG"
 import IconTrashSVG from "../svg/IconTrashSVG"
-import { MainConfigContext, ISettings } from "../../containers/HomeContainer"
-import IconUnderlineSVG from "../svg/IconUnderlineSVG"
-import { toast } from 'react-toastify';
+import CrylicWordsTableComponent from "./CrylicWordsTableComponent";
+import {debounce, isEmpty} from 'lodash';
 
 interface IContentObject {
     htmlContent: string,
     textContent: string
 }
+
 interface IProps {
     changeCrylicData: (s: string) => void,
     changeLatinData: (s: string) => void,
@@ -62,74 +61,65 @@ const EditorFooter = styled.div`
         background: white;
     }
 `
-export default function CrylicEditorComponent({ crylicEditor, crylicObj, crylicValue, setCrylicObj,
-    changeCrylicData, changeLatinData, trashListener, copyListener }: IProps) {
+export default function CrylicEditorComponent({
+                                                  crylicEditor, crylicObj, crylicValue, setCrylicObj,
+                                                  changeCrylicData, changeLatinData, trashListener, copyListener
+                                              }: IProps) {
 
     const crylicContentListener = (htmlContent: string) => {
-        setCrylicObj({
-            htmlContent,
-            textContent: parseUtils.clearHTMLContent(htmlContent)
-        })
-        htmlContent += "<";
-
-        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
-            (all: string, b: string, c: string, f: string): string => {
-                let parsed_str = parseUtils.parseToLatin(c);
-                return String(b + parsed_str + f);
+        if (!isEmpty(htmlContent)) {
+            console.log("Latin -> Kril ...................")
+            setCrylicObj({
+                htmlContent,
+                textContent: parseUtils.clearHTMLContent(htmlContent)
             })
-        htmlContent = htmlContent.slice(0, -1);
+            htmlContent += "<";
 
-        changeLatinData(htmlContent)
+            htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
+                (all: string, b: string, c: string, f: string): string => {
+                    let parsed_str = parseUtils.parseToLatin(c);
+                    return String(b + parsed_str + f);
+                })
+            htmlContent = htmlContent.slice(0, -1);
+
+            changeLatinData(htmlContent)
+        }
     }
 
+    const debouncedCrylicListener = debounce(crylicContentListener, 50)
 
-    const onlyText = parseUtils.clearCrylicContent(crylicObj.textContent);
-    const allWords = onlyText.split(" ");
+
     return (
         <div className='editable-box'>
             <div ref={crylicEditor}
-                contentEditable={true}
-                className="editable crylic-editor"
-                placeholder="Krilcha matn..."
-                onKeyUp={(e: any) => crylicContentListener(e.target.innerHTML)}
-                onFocus={(e: any) => crylicContentListener(e.target.innerHTML)}
-                dangerouslySetInnerHTML={{ __html: crylicValue }}>
+                 contentEditable={true}
+                 className="editable crylic-editor"
+                 placeholder="Krilcha matn..."
+                 onKeyUp={(e: any) => debouncedCrylicListener(e.target.innerHTML)}
+                 onFocus={(e: any) => debouncedCrylicListener(e.target.innerHTML)}
+                 dangerouslySetInnerHTML={{__html: crylicValue}}>
             </div>
             <EditorFooter>
                 <div className="count-info">
                     Кирилча матн: {crylicObj.textContent.length} та белги
-                        </div>
+                </div>
                 <div className="action-box">
                     <button className="btn" onClick={e => trashListener(changeCrylicData)}>
-                        <IconTrashSVG title="Тозалаш" color="#666" />
+                        <IconTrashSVG title="Тозалаш" color="#666"/>
                     </button>
-                    <button className="btn" onClick={e => copyListener(crylicObj.htmlContent, "Kirilcha HTML-kontenti")}>
-                        <CopyHTMLContentSVG title="Тўлиқ(HTML билан) нусхалаш" color="#666" />
+                    <button className="btn"
+                            onClick={e => copyListener(crylicObj.htmlContent, "Kirilcha HTML-kontenti")}>
+                        <CopyHTMLContentSVG title="Тўлиқ(HTML билан) нусхалаш" color="#666"/>
                     </button>
                     <button className="btn" onClick={e => copyListener(crylicObj.textContent, "Kirilcha matni")}>
-                        <CopyTextContentSVG title="Фақат матнни нусхалаш" />
+                        <CopyTextContentSVG title="Фақат матнни нусхалаш"/>
                     </button>
                     <button className="btn btn-convert hide">
-                        <IconHandRightArrowSVG title="Лотинга ўгириш" color="#5983e8" />
+                        <IconHandRightArrowSVG title="Лотинга ўгириш" color="#5983e8"/>
                     </button>
                 </div>
             </EditorFooter>
-
-            <table>
-                <tr>
-                    <th>So'z</th>
-                    <th>Slug</th>
-                    <th>Natijaviy</th>
-                </tr>
-                {allWords.map((word:string, index:number) => (
-                    <tr key={index}>
-                        <td>{word}</td>
-                        <td>{parseUtils.parseToLatinSlug(word)}</td>
-                        <td>{parseUtils.getOnlyWords(word)}</td>
-                    </tr>
-                ))}
-            </table>
-            {onlyText}
+            {false && <CrylicWordsTableComponent crylicObj={crylicObj}/>}
         </div>
     )
 } 

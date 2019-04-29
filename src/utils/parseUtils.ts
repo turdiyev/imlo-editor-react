@@ -1,3 +1,5 @@
+import {toLower, toUpper, upperFirst, trim, eq} from "lodash"
+
 export const SYMBOL_TUTUQ = "ʼ";
 export const SYMBOL_FOR_OG = "ʻ";
 
@@ -17,7 +19,6 @@ export const LATIN_LETTER_PAIRS: ReadonlyArray<[{}, {}]> = [["A", "А"], ["a", "
 
 export const CRYLIC_MAP: Map<{}, {}> = new Map(CRYLIC_LETTER_PAIRS)
 export const LATIN_MAP: Map<{}, {}> = new Map(LATIN_LETTER_PAIRS)
-import {toLower, trim} from "lodash"
 
 export const RUSSIAN_YO_YU_YE_YA_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     ["ключ", "kluch"],
@@ -85,9 +86,15 @@ export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
 ]
 
 export const RUSSIAN_TS_LETTER_TERMS: ReadonlyArray<[string, string]> = [
-    ["кварц", "kvars"], ["шприц", "shpris"], ["целлофан", "sellofan"], ["цилиндр", "silindr"], ["антициклон", "antisiklon"], ["конструкция", "konstruksiya"],
+    ["кварц", "kvars"], ["шприц", "shpris"],
+    ["целлофан", "sellofan"], ["цемент", "sement"], ["цех", "sex"], ["цирк", "sirk"], ["центр", "sentr"],
+    ["цилиндр", "silindr"], ["антициклон", "antisiklon"], ["конструкция", "konstruksiya"],
     ["глицирин", "glitserin"], ["гербицит", "gerbitsid"],
-    ["цех", "sex"], ["цирк", "sirk"], ["акция", "aksiya"],
+    ["акция", "aksiya"],
+    ["конференция", "konferensiya"],
+    ["француз", "fransuz"],
+    ["функцияси", "funksiya"],
+    ["инерция", "inersiya"],
     ["лицей", "litsey"], ["офицер", "ofitser"], ["доцент", "dotsent"],
     ["цанга", "sanga"], ["цапфа", "sapfa"], ["цедра", "sedra"], ["целом", "selom"], ["цент", "sent"], ["ценз", "senz"], ["церий", "seriy"], ["цеце", "setse"], ["цезура", "sezura"], ["цинга", "singa"], ["цинния", "sinniya"], ["циркуль", "sirkul"], ["цирроз", "sirroz"], ["циста", "sista"], ["цоколь", "sokol"]
 ]
@@ -102,31 +109,38 @@ export const clearCrylicContent = (content: string) => {
     // const lower_content = content.toLowerCase();cleaned_content
     // .replace(/([\d\,\.\\\/\’\"\”\“\«\»\%\?\_\+\=\!\:\;\]\[\{\}\(\)\*\•\✅])/g, ' ')
 
-    return trim(content)
+    content = content
         .replace(/[^\u0400-\u04FF\-\s]/g, ' ')
         .replace(/[a-zA-Z]/g, '')
         .replace(/\–\—\-/g, '-')
         .replace(/\s{2,}/g, " ")
         .replace(/\B-?([\u0400-\u04FF\w]+\-?[\u0400-\u04FF\w]+)-?\B/g, "$1");
+
+    return trim(content)
 }
 
 export const clearHTMLContent = (content: string) => {
-    return trim(content)
+
+    content = content
         .replace(/<[^>]+>/g, ' ')
         .replace(/&[^;]+;/g, ' ')
         .replace(/\–\—\-/g, '-')
         .replace(/\s{2,}/g, " ")
+
+    return trim(content)
 }
 
 export const clearLatinContent = (content: string) => {
 
-    return trim(content)
+    content = content
         .replace(/['`ʼʻ‘']/g, 'ʻ')
         .replace(/[^a-zA-Zʻ\-\s]/g, ' ')
         .replace(/[\u0400-\u04FF]/g, ' ')
         .replace(/\–\—\-/g, '-')
         .replace(/\s{2,}/g, ' ')
         .replace(/\B-?([\w]+\-?[\w]+)-?\B/g, "$1")
+    
+    return trim(content)
 }
 
 export const parseLatinAsSlug = (string: string) => {
@@ -140,20 +154,38 @@ export const parseLatinAsSlug = (string: string) => {
     string = toLower(string).replace(/\s/g, '-')
     return string;
 }
+export const getReplacementWithCaseSensitive = (oldValue: string, value: string): string => {
+    switch (oldValue) {
+        case toLower(oldValue):
+            value = toLower(value);
+            break;
+        case toUpper(oldValue):
+            value = toUpper(value);
+            break;
+        case upperFirst(oldValue):
+            value = upperFirst(value);
+            break;
+    }
+    return value;
+}
 
 export const parseRussianTermsToLatin = (crylic_text: string): string => {
     RUSSIAN_TERMS.forEach((value: string, key: string) => {
-        crylic_text = crylic_text.replace(new RegExp(key, 'ig'), value)
+        const PATTERN = new RegExp(key, 'ig');
+        const matchedArray = crylic_text.match(PATTERN);
+        if (Boolean(matchedArray)) {
+            crylic_text = crylic_text.replace(PATTERN, oldValue => getReplacementWithCaseSensitive(oldValue, value))
+        }
     })
     return crylic_text;
 }
 
 export const parseRussianTermsToCrylic = (latin_text: string): string => {
-    // RUSSIAN_TS_LETTER_TERMS.forEach((itemArr: string[]) => {
-    //     latin_text = latin_text.replace(new RegExp(itemArr[1], 'ig'), itemArr[0]);
-    // })
     RUSSIAN_TERMS.forEach((value: string, key: string) => {
-        latin_text = latin_text.replace(new RegExp(value, 'ig'), key);
+        const PATTERN = new RegExp(value, 'ig');
+        if (latin_text.search(PATTERN) > -1) {
+            latin_text = latin_text.replace(PATTERN, oldValue => getReplacementWithCaseSensitive(oldValue, key));
+        }
     });
 
     return latin_text;
@@ -188,10 +220,6 @@ export const parseToCrylic = (latin_text: string = ""): string => {
     let result_text: string = ""
 
     latin_text = parseRussianTermsToCrylic(latin_text)
-
-    RUSSIAN_TERMS.forEach((value: string, key: string) => {
-        latin_text = latin_text.replace(new RegExp(value, 'ig'), key);
-    });
 
     latin_text = latin_text.replace(/\b([e])/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'i'))
@@ -261,7 +289,5 @@ export const getOnlyWords = (str: string): string => {
     return str.replace(/[^a-zA-Z\d\u0400-\u04FF\-'`ʼʻ‘']/, ' ')
 }
 
-const aa = [
-
-]
+const aa = []
 // прототип, протест, сенсация, синдром, болт, платформа, счётчик, инфляция, космос, тара, блистер, аншлаг, датчик, меценат, интерьер, демонтаж, табел, дирекция, эффект, эффектив, телеэффект, видеошутинг, фотофиксация, заявка, эстакада, эскалатор, лифт, шоссе, туннел, линия, светофор, таймер, фон, коммерция, оккупация, идентификация, ассоциация, оптимизм, шар, шоу, инфраструктура, дисбаланс, навигация, доза, креатив, донор, рельс, бойкот, аномал, аномалия, водопровод, канализация, канализацион, формат, татами, прицеп, камбэк, плей-офф, теракт, кран, сутка, ячейка, порция, дефицит, корректор, цунами, уик-енд, постамент, делегация, дезинформация, фонд, контингент, тенденция, инсайдер, узел (авто), лайнер, авиалайнер, круиз, досье, посилка, психологик, психика, самосвал, тротуар, грейдер, сплитер, пас, позиция, мини, бункер, кондиционер, вентилятор, архитектура, архитектор, аноним, пирожка, причал, паром, терминал, карьера, банкир, аналог, монолит, элита, бутик, азарт, сумма, печь, участка, масса, риск, сетка, гонорар, шасси, заправка, модификация, визуализация, рейс, минимал, потенциал, енот, эксперимент, графа, бутик, прогноз, велопатруль, сектор, суперкамбэк, интрига, марш, доклад, дебют, снайпер, санкция, жилет, рейтинг, инаугурация, эволюция, подъезд, анклав, мэрия, мэр, провинция, горелка, наркотрафик, наркотик, трансфер, посёлка, плитка, шайба, металлолом, макулатура, радикал, рейс, гегемон, крест, пуск, керамик, транспортировка, Рождество, альянс, коллектив, эпатаж, тип, офис, плюс, бум, борт, фюзелаж, шарклет, реабилитация, оборот, бутса, реакция, антик, зонд, парковка, иллюзия, арена, фуникулёр, лимит, маневр, винт, транзит, фара, медиатор, комплектация, сюрприз, коалиция, вотум, пульс, пульт, квота, респект, купе, фискал, хор, шок, мотив, тунель, тотал, резиденция, премиум-класс, старт, визит, футболка, кепка, атрибутика, эвакуация, агент (жосус), операцион, операция, петиция, монетизация, реализатор, реализация, камин, дуэль, модел, гастрономик, пролёт, гашиш, динамика, тонировка, клетчатка, провакация, контекст, тормоз, гедонизм, формализм, стажировка, кома, шоу рум, сервис, криминоген, изоляционизм, меркантализм, генерация, раунд, аукцион, регистрация, эксплуатация, парадокс, фильтр, унитаз, наклейка, базис, шорт-лист, шабаш, самосуд, яхта, идеал, монах, дизайн, трасса, курорт, веранда, балкон, терасса (тўғриси – терраса), персонал, авторизация, локал, эмпатия, манёвр, этика, эстетика, покер, структура, корт, схема, состав, позитив, стресс, секунд, фаворит, аудитория, ротация, факт, турнир, номинация, сертификат, айсберг, бак, форвард, турнир, массаж, шалтер, коллегия, эпизод, панорама, пассив, лексикон, котлован, аксессуар, парфюмерия, колонна (қатор, саф), абсурд, этап, индексация, стержен, стереотип, приют, ориентир, реставрация, анонс, котель (тўғриси – котёл), октагон, транзакция, кулачок, поршен, подшипник, плёнка, двигател, браслет, габарид (тўғриси – габарит), оператив, гид, нерв, ландшафт, шпал, вибрация, семестер, реванш, феномен, хит, шлягер, проём, шар, смена, колония, гараж, антиквариат, модельер, модел, фигурант, павильон, штаб-квартира, антициклон, сегмент, коридор, организм, эмоционал, блок, декоратив, хаос, концептуал, концепция, прайс-лист, рекорд, популяция, браконьер, сигнал, сигнализация, бонус, саботаж, куратор, снаряд, заряд, тренажёр, клапан, контур, дрифтинг, квартет, лидер, мэншн, ричаг, мачта, конструкция, ряска, кампус, компенсация, калибр, объектив, собор, пляж, аквамарин, акцент, аристократ, инструмент, гранд, информацион, сувенир, глушител, норматив, изоляция, консультант, менежер, пенсионерка, декорация, шаблон, гибрид, экономика, дриблёр, пост (интернет), ордер, апостиль, куртка, маньяк, индивидуал, рулетка, смог, колонка, лезвие, узурпатор, ракурс, протокол, негатив, компоновка, болбой, опция, картина, презентация, график, ролик, каркас, арсенал, экипаж, стакан, проезд, швартовка, ажиотаж, конвой, флагшток, революцион, километраж, фаза, профил, меню, оцинковка, титул, жунгли, пробел, методика, экипировка, ригел, навес, авария, тупик, мародёр, лава, эмиграция, талон, рационал, великан, санузел, ультиматум, юбилей, мастер...
