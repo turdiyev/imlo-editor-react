@@ -86,7 +86,9 @@ export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
 ]
 
 export const RUSSIAN_TS_LETTER_TERMS: ReadonlyArray<[string, string]> = [
-    ["кварц", "kvars"], ["шприц", "shpris"],
+    ["кварц", "kvars"],
+    ["шприц", "shpris"],
+    ["цивилизация", "sivilizatsiya"],
     ["целлофан", "sellofan"], ["цемент", "sement"], ["цех", "sex"], ["цирк", "sirk"], ["центр", "sentr"],
     ["цилиндр", "silindr"], ["антициклон", "antisiklon"], ["конструкция", "konstruksiya"],
     ["глицирин", "glitserin"], ["гербицит", "gerbitsid"],
@@ -139,7 +141,7 @@ export const clearLatinContent = (content: string) => {
         .replace(/\–\—\-/g, '-')
         .replace(/\s{2,}/g, ' ')
         .replace(/\B-?([\w]+\-?[\w]+)-?\B/g, "$1")
-    
+
     return trim(content)
 }
 

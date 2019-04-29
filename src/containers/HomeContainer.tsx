@@ -6,8 +6,6 @@ import IconTabSVG from "../components/svg/IconTabSVG"
 import IconStatisticChartSVG from "../components/svg/IconStatisticChartSVG"
 import IconVerticalViewSVG from "../components/svg/IconVerticalViewSVG"
 import IconPageLayoutViewSVG from "../components/svg/IconPageLayoutViewSVG"
-import {LATIN_IMLO_DICT,test} from "../constants/latinWords"
-import {WordObject} from "../type/WordObjectType"
 import posed from 'react-pose'
 import styled from 'styled-components'
 import Switch from "react-switch";
@@ -114,8 +112,6 @@ export const MainConfigContext = React.createContext<[ISettings, any]>([initialC
 export default function HomeContainer() {
     const [sidebarVisible, setSidebarVisible] = useState<boolean>(false);
     const [config, setConfig] = useLocalStorage<ISettings>("editor_config", initialConfig);
-    const hundredWords: WordObject[] = test().slice(0, 100);
-    //
 
     return (
         <MainConfigContext.Provider value={[config, setConfig]}>
@@ -124,11 +120,6 @@ export default function HomeContainer() {
                 <EditorComponent
 
                 />
-                <ol>
-                    {hundredWords.map((item: WordObject, index: number) => (
-                        <li>{item.word} - {item.info}</li>
-                    ))}
-                </ol>
                 <HomeSidebar>
                     <ConfigSidebar className="settings-sidebar" pose={sidebarVisible ? 'enter' : 'exit'}>
                         <header>
