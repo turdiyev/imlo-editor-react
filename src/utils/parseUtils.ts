@@ -353,6 +353,7 @@ export const parseToCrylic = (latin_text: string = ""): string => {
     latin_text = latin_text.replace(/\b([e])/ig, (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'i'))
     })
+    latin_text = latin_text.replace(/([aeiuo])ev/ig, '$1ев');
     latin_text = latin_text.replace(/([aeiuo])e/ig, '$1э')
     latin_text = latin_text.replace(/ts/g, 'ц')
 
