@@ -16,8 +16,8 @@ export const decompressFromBase64 = (str: string): WordObject[] => {
 export const LATIN_IMLO_DICT:WordObject[] =  decompressFromBase64(words)
 
 
-export const test = () => {
-    const txt: string = compressToBase64(json);
-    console.log(txt);
-    return decompressFromBase64(txt)
-}
+// export const test = () => {
+//     const txt: string = compressToBase64(json);
+//     console.log(txt);
+//     return decompressFromBase64(txt)
+// }

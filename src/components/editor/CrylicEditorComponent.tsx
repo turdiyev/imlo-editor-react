@@ -68,7 +68,7 @@ export default function CrylicEditorComponent({
 
     const crylicContentListener = (htmlContent: string) => {
         if (!isEmpty(htmlContent)) {
-            console.log("Latin -> Kril ...................")
+            console.log("Kril -> Latin  ...................")
             setCrylicObj({
                 htmlContent,
                 textContent: parseUtils.clearHTMLContent(htmlContent)
