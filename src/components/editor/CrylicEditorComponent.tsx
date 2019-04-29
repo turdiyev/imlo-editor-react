@@ -1,4 +1,4 @@
-import React, {useRef, useState, Ref} from 'react'
+import React from 'react'
 import * as parseUtils from "../../utils/parseUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "../svg/CopyHTMLContentSVG"
@@ -6,7 +6,7 @@ import CopyTextContentSVG from "../svg/CopyTextContentSVG"
 import IconHandRightArrowSVG from "../svg/IconHandRightArrowSVG"
 import IconTrashSVG from "../svg/IconTrashSVG"
 import CrylicWordsTableComponent from "./CrylicWordsTableComponent";
-import {debounce, isEmpty} from 'lodash';
+import {debounce} from 'lodash';
 
 interface IContentObject {
     htmlContent: string,
@@ -67,7 +67,6 @@ export default function CrylicEditorComponent({
                                               }: IProps) {
 
     const crylicContentListener = (htmlContent: string) => {
-        if (!isEmpty(htmlContent)) {
             console.log("Kril -> Latin  ...................")
             setCrylicObj({
                 htmlContent,
@@ -83,7 +82,6 @@ export default function CrylicEditorComponent({
             htmlContent = htmlContent.slice(0, -1);
 
             changeLatinData(htmlContent)
-        }
     }
 
     const debouncedCrylicListener = debounce(crylicContentListener, 50)

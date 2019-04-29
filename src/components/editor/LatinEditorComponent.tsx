@@ -77,10 +77,9 @@ export default function LatinEditorComponent({
 
 
     const latinContentListener = (htmlContent: string) => {
-        if (!isEmpty(htmlContent)) {
             const textContent = parseUtils.clearHTMLContent(htmlContent)
-            debugger;
-            if (isEmpty(textContent)) return;
+            // debugger;
+            // if (isEmpty(textContent)) return;
 
             console.log("Latin -> Kril ...................")
             setLatinObj({htmlContent, textContent})
@@ -96,7 +95,6 @@ export default function LatinEditorComponent({
                 })
             htmlContent = htmlContent.slice(0, -1);
             changeCrylicData(htmlContent)
-        }
     }
 
     const debouncedLatinListener = debounce(latinContentListener, 50)
