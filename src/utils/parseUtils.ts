@@ -1,10 +1,9 @@
-import {includes, toLower, toUpper, trim, upperFirst} from "lodash"
+import {includes, toLower, toUpper, trim, uniqBy, upperFirst} from "lodash"
 import {LATIN_IMLO_ARRAY} from "../constants/latinWords"
 
 export const SYMBOL_TUTUQ = "ʼ";
 export const SYMBOL_FOR_OG = "ʻ";
 export const SYMBOLS_SINGLE_QUOTE_PATTERN = "['`ʼʻ‘']";
-
 export const CRYLIC_LETTERS = ["А", "а", "Б", "б", "В", "в", "Г", "г", "Д", "д", "Е", "е", "Ё", "ё", "Ж", "ж", "З", "з", "И", "и", "Й", "й", "К", "к", "Л", "л", "М", "м", "Н", "н",
     "О", "о", "П", "п", "Р", "р", "С", "с", "Т", "т", "У", "у", "Ф", "ф", "Х", "х", "Ц", "ц", "Ч", "ч", "Ш", "ш", "Ъ", "ъ", "Ь", "ь", "Э", "э", "Ю", "ю", "Я", "я", "Ў", "ў", "Қ", "қ", "Ғ", "ғ", "Ҳ", "ҳ"]
 export const LATIN_LETTERS = ["A", "a", "B", "b", "V", "v", "G", "g", "D", "d", "Ye", "ye", "Yo", "yo", "J", "j", "Z", "z", "I", "i", "Y", "y", "K", "k", "L", "l", "M", "m", "N", "n", "O",
@@ -274,6 +273,7 @@ export const clearLatinContent = (content: string) => {
         .replace(/[^a-zA-Zʻ'`ʼʻ‘'\-\s]/g, ' ')
         .replace(/[\u0400-\u04FF]/g, ' ')
         .replace(/\–\—\-/g, '-')
+        .replace(/\s-\s/g, '')
         .replace(/\s{2,}/g, ' ')
         .replace(/\B-?([\w]+\-?[\w]+)-?\B/g, "$1")
 
@@ -377,23 +377,29 @@ export const parseToCrylic = (latin_text: string = ""): string => {
     })
 
 
-    latin_text = latin_text.replace(/(['`ʼʻ‘])/ig, (match: string, first: string, second: string) => {
-        return String(LATIN_MAP.get(SYMBOL_TUTUQ))
-    })
+    // latin_text = latin_text.replace(new RegExp(SYMBOLS_SINGLE_QUOTE_PATTERN, "ig"),
+    //     LATIN_MAP.get(SYMBOL_TUTUQ) || "");
+    // (match: string, first: string, second: string) => {
+    // return String(LATIN_MAP.get(SYMBOL_TUTUQ))
+    // })
 
-    latin_text = latin_text.replace(/([og])(['`ʼʻ‘])/ig, (match: string, first: string, second: string) => {
+    latin_text = latin_text.replace(new RegExp(`([og])${SYMBOLS_SINGLE_QUOTE_PATTERN}`, "ig"),
+        (match: string, first: string, second: string) => {
         return String(LATIN_MAP.get(first + SYMBOL_FOR_OG))
     })
 
-    latin_text = latin_text.replace(/([y])o/ig, (match: string, first: string, second: string) => {
+    latin_text = latin_text.replace(/([y])o/ig,
+        (match: string, first: string, second: string) => {
         return String(LATIN_MAP.get(first + 'o'))
     })
 
-    latin_text = latin_text.replace(/([s])h/ig, (match: string, first: string) => {
+    latin_text = latin_text.replace(/([s])h/ig,
+        (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'h'))
     })
 
-    latin_text = latin_text.replace(/([s])(['`ʼʻ‘])h/ig, (match: string, first: string) => {
+    latin_text = latin_text.replace(new RegExp(`([s])(${SYMBOLS_SINGLE_QUOTE_PATTERN})h`, "ig"),
+        (match: string, first: string) => {
         return String(LATIN_MAP.get(first)) + String(LATIN_MAP.get('h'))
     })
 
@@ -432,5 +438,5 @@ export const findLatinIncorrectWords = (text: string): string[] => {
     const clearedLatinText: string = clearLatinContent(text);
     const word_list = clearedLatinText.split(" ");
 
-    return word_list.filter((word: string) => !includes(LATIN_IMLO_ARRAY, word));
+    return uniqBy(word_list.filter((word: string) => !includes(LATIN_IMLO_ARRAY, word)), toLower);
 }

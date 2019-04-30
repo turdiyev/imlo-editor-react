@@ -100,22 +100,26 @@ export default function LatinEditorComponent({
         // setLat
         let htmlContent = latinEditor.current.innerHTML;
         htmlContent += "<";
+        const incorrect_words: string[] = parseUtils.findLatinIncorrectWords(latinEditor.current.innerText);
 
         htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
             (all: string, b: string, c: string, f: string): string => {
                 let parsed_str = parseUtils.changeSingleQuotes(c);
                 // parsed_str = parsed_str.replace(/&([^;]+);/g, (all: string, first: string) =>
                 //     "&" + parseUtils.parseToLatin(first) + ";")
+
+                incorrect_words.map((word: string) => {
+                    parsed_str = parsed_str.replace(
+                        new RegExp(`\\b(${word})\\b`, 'ig'),
+                        "<span class=\"incorrect-word\">$1</span>"
+                    )
+                })
                 return String(b + parsed_str + f);
             })
         htmlContent = htmlContent.slice(0, -1);
 
-        const incorrect_words: string[] = parseUtils.findLatinIncorrectWords(latinEditor.current.innerText);
         console.log("INCORRECT words -------", incorrect_words);
-        incorrect_words.map((word: string) => {
-            console.warn("word=", word, htmlContent)
-            htmlContent = htmlContent.replace(new RegExp(`(${word})`), "<span class=\"incorrect-word\">$1</span>")
-        })
+
         changeLatinData(htmlContent)
     }
     return (
