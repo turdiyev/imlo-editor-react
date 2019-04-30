@@ -14,6 +14,7 @@ export const decompressFromBase64 = (str: string): WordObject[] => {
 }
 
 export const LATIN_IMLO_DICT:WordObject[] =  decompressFromBase64(words)
+export const LATIN_IMLO_ARRAY: string[] = LATIN_IMLO_DICT.map((obj: WordObject) => obj.word);
 
 
 // export const test = () => {

@@ -1,17 +1,12 @@
-import React, { useRef, useState, ReactNode } from 'react'
+import React, {ReactNode, useRef, useState} from 'react'
 import * as parseUtils from "../utils/parseUtils"
 import styled from 'styled-components';
-import CopyHTMLContentSVG from "./svg/CopyHTMLContentSVG"
-import CopyTextContentSVG from "./svg/CopyTextContentSVG"
 // import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
 import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
-import IconTrashSVG from "./svg/IconTrashSVG"
 import LatinEditorComponent from "./editor/LatinEditorComponent"
 import CrylicEditorComponent from "./editor/CrylicEditorComponent"
-import { MainConfigContext, ISettings } from "../containers/HomeContainer"
-import IconUnderlineSVG from "./svg/IconUnderlineSVG"
-import { toast } from 'react-toastify';
-import { debounce} from 'lodash';
+import {MainConfigContext} from "../containers/HomeContainer"
+import {toast} from 'react-toastify';
 
 interface IContentObject {
     htmlContent: string,
@@ -79,6 +74,12 @@ const EditorWrap = styled.div`
         font-size:15px;
         font-family: "Arial";
         overflow:auto;
+        .incorrect-word{
+            display:inline-block;
+            padding:3px;
+            background: rgba(255,10,10, 0.3);
+            border-bottom: 2px dashed red;
+        }
     }
     .editable:focus{
        outline:none;

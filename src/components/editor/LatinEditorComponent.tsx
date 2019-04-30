@@ -1,14 +1,11 @@
-import React, {useRef, useState, Ref} from 'react'
+import React from 'react'
 import * as parseUtils from "../../utils/parseUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "./../svg/CopyHTMLContentSVG"
 import CopyTextContentSVG from "../svg/CopyTextContentSVG"
 // import IconHandLeftArrowSVG from "./svg/IconHandLeftArrowSVG"
-import IconHandRightArrowSVG from "../svg/IconHandRightArrowSVG"
 import IconTrashSVG from "../svg/IconTrashSVG"
-import {MainConfigContext, ISettings} from "../../containers/HomeContainer"
-import IconUnderlineSVG from "../svg/IconUnderlineSVG"
-import {debounce, isEmpty} from 'lodash';
+import {debounce} from 'lodash';
 import {IContentObject} from "../../type/EditorTypes";
 import LatinWordsTableComponent from "./LatinWordsTableComponent";
 
@@ -98,6 +95,29 @@ export default function LatinEditorComponent({
     }
 
     const debouncedLatinListener = debounce(latinContentListener, 50)
+
+    const verifyListener = () => {
+        // setLat
+        let htmlContent = latinEditor.current.innerHTML;
+        htmlContent += "<";
+
+        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
+            (all: string, b: string, c: string, f: string): string => {
+                let parsed_str = parseUtils.changeSingleQuotes(c);
+                // parsed_str = parsed_str.replace(/&([^;]+);/g, (all: string, first: string) =>
+                //     "&" + parseUtils.parseToLatin(first) + ";")
+                return String(b + parsed_str + f);
+            })
+        htmlContent = htmlContent.slice(0, -1);
+
+        const incorrect_words: string[] = parseUtils.findLatinIncorrectWords(latinEditor.current.innerText);
+        console.log("INCORRECT words -------", incorrect_words);
+        incorrect_words.map((word: string) => {
+            console.warn("word=", word, htmlContent)
+            htmlContent = htmlContent.replace(new RegExp(`(${word})`), "<span class=\"incorrect-word\">$1</span>")
+        })
+        changeLatinData(htmlContent)
+    }
     return (
         <div className='editable-box'>
             <div ref={latinEditor}
@@ -123,6 +143,10 @@ export default function LatinEditorComponent({
                     <button className="btn"
                             onClick={e => copyListener(latinObj.textContent, "Kirilcha matni(HTML siz)")}>
                         <CopyTextContentSVG title="Faqat matnni nusxalash"/>
+                    </button>
+                    <button className="btn"
+                            onClick={e => verifyListener()}>
+                        <CopyTextContentSVG title="Faqat matnni nusxalash"/> Verify
                     </button>
                 </div>
             </EditorFooter>
