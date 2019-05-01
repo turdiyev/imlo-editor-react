@@ -103,7 +103,7 @@ export default function LatinEditorComponent({
             changeCrylicData(htmlContent)
     }
 
-    const debouncedLatinListener = debounce(latinContentListener, 50)
+    const debouncedLatinListener = debounce(latinContentListener, 500)
 
     const verifyListener = () => {
         // setLat

@@ -378,16 +378,22 @@ export const parseToCrylic = (latin_text: string = ""): string => {
     })
 
 
-    // latin_text = latin_text.replace(new RegExp(SYMBOLS_SINGLE_QUOTE_PATTERN, "ig"),
-    //     LATIN_MAP.get(SYMBOL_TUTUQ) || "");
-    // (match: string, first: string, second: string) => {
-    // return String(LATIN_MAP.get(SYMBOL_TUTUQ))
-    // })
 
     latin_text = latin_text.replace(new RegExp(`([og])${SYMBOLS_SINGLE_QUOTE_PATTERN}`, "ig"),
         (match: string, first: string, second: string) => {
         return String(LATIN_MAP.get(first + SYMBOL_FOR_OG))
     })
+
+    latin_text = latin_text.replace(new RegExp(`([s])(${SYMBOLS_SINGLE_QUOTE_PATTERN})h`, "ig"),
+        (match: string, first: string) => {
+            return String(LATIN_MAP.get(first)) + String(LATIN_MAP.get('h'))
+        })
+
+
+    latin_text = latin_text.replace(new RegExp(SYMBOLS_SINGLE_QUOTE_PATTERN, "ig"),
+        (match: string, first: string, second: string) => {
+            return String(LATIN_MAP.get(SYMBOL_TUTUQ))
+        })
 
     latin_text = latin_text.replace(/([y])o/ig,
         (match: string, first: string, second: string) => {
@@ -397,11 +403,6 @@ export const parseToCrylic = (latin_text: string = ""): string => {
     latin_text = latin_text.replace(/([s])h/ig,
         (match: string, first: string) => {
         return String(LATIN_MAP.get(first + 'h'))
-    })
-
-    latin_text = latin_text.replace(new RegExp(`([s])(${SYMBOLS_SINGLE_QUOTE_PATTERN})h`, "ig"),
-        (match: string, first: string) => {
-        return String(LATIN_MAP.get(first)) + String(LATIN_MAP.get('h'))
     })
 
     latin_text = latin_text.replace(/([c])h/ig, (match: string, first: string) => {
