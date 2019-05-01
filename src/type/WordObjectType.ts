@@ -1,4 +1,4 @@
 export interface WordObject {
-    word:string,
-    info:string
+    name: string,
+    info: string
 }

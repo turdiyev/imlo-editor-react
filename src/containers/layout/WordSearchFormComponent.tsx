@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import IconSearchSVG from "../../components/svg/IconSearchSVG";
 import posed from "react-pose";
 import styled from "styled-components";
+import {debounce, includes, slice} from "lodash"
+import {LATIN_IMLO_ARRAY} from "../../constants/latinWords";
 
 interface IProps {
 }
@@ -60,6 +62,7 @@ const SidebarBody = styled.div`
             cursor:pointer;
             padding: 15px 20px;
             display:flex;
+            line-height:1.4;
             color:#666;
             span{
                 flex:1;
@@ -104,24 +107,42 @@ const SearchSidebar = posed.div({
 
 export default function WordSearchFormComponent({}: IProps) {
     const [visibleSearchBar, setVisibleSearchBar] = useState<boolean>(false);
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [wordList, setWordList] = useState<string[]>([]);
     const searchSubmitListener = (e: any) => {
 
     }
-    const inputKeyupListener = (e: any) => {
-        if (e.target.value) {
+    let timer: undefined | number;
+    const inputKeyupListener = (searchValue: string) => {
+        setSearchValue(searchValue);
+        if (timer) {
+            clearTimeout(timer);
+        }
+        new Promise(resolve => {
+                timer = setTimeout(() =>
+                        resolve(LATIN_IMLO_ARRAY.filter((word: string) => searchValue && includes(word, searchValue))),
+                    100)
+            }
+        )
+            .then((list: any) => {
+                setWordList(slice(list, 0, 10))
+            });
 
+        if (searchValue) {
             setVisibleSearchBar(true);
         } else {
             setVisibleSearchBar(false);
         }
     }
+    const debouncedKeyupListener = debounce(inputKeyupListener, 500)
+
     return (
         <>
             <form className="word-search-box" onSubmit={searchSubmitListener}>
                 <input type="text"
                        className="word-search"
                        placeholder={"so'zni qidiring..."}
-                       onKeyUp={inputKeyupListener}
+                       onKeyUp={(e: any) => debouncedKeyupListener(e.target.value)}
                 />
                 <button className="btn" type="submit">
                     <IconSearchSVG color="white"/>
@@ -136,9 +157,10 @@ export default function WordSearchFormComponent({}: IProps) {
                 <SearchSidebar className="search-sidebar" pose={visibleSearchBar ? 'visible' : 'hidden'}>
                     <SidebarBody>
                         <ul className="list">
-                            <li>
-                                Word
-                            </li>
+                            {wordList.map((word: string, index: number) =>
+                                <li key={index}>
+                                    {word}
+                                </li>)}
                         </ul>
                     </SidebarBody>
                     <footer>
