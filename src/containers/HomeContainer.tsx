@@ -111,11 +111,13 @@ export const MainConfigContext = React.createContext<[ISettings, any]>([initialC
 
 export default function HomeContainer() {
     const [sidebarVisible, setSidebarVisible] = useState<boolean>(false);
+    const [searchVisible, setSearchSidebarVisible] = useState<boolean>(false);
     const [config, setConfig] = useLocalStorage<ISettings>("editor_config", initialConfig);
 
     return (
         <MainConfigContext.Provider value={[config, setConfig]}>
-            <MainLayout settingsClickListener={(e: any) => setSidebarVisible(!sidebarVisible)}>
+            <MainLayout
+                settingsClickListener={(e: any) => setSidebarVisible(!sidebarVisible)}>
 
                 <EditorComponent
 

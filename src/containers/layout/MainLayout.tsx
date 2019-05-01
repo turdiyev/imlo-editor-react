@@ -1,9 +1,10 @@
-import React, { ReactNode, useState } from 'react'
+import React, {ReactNode, useState} from 'react'
 import styled from "styled-components"
-import IconSpellCheckSVG from "../../components/svg/IconSpellCheckSVG"
 import IconSettingsSVG from "../../components/svg/IconSettingsSVG"
 import LogoComponent from '../../components/LogoComponent';
-import posed, { PoseGroup } from "react-pose"
+import posed, {PoseGroup} from "react-pose"
+import WordSearchFormComponent from "./WordSearchFormComponent";
+
 interface IProps {
     children: ReactNode,
     settingsClickListener: (e: any) => void
@@ -30,6 +31,20 @@ const Nav = styled.nav`
 
     .middle-box{
         flex:1
+    }
+    .word-search-box{
+        height:60px;
+        line-height:60px;
+        input{
+            border:1px solid #5983e8;
+            background:rgba(255,255,255,0.5);
+            font-size:16px;
+            padding: 7px 12px;
+        }
+        .btn{
+            height:60px;
+            width:60px;
+        }
     }
     .btn{
         border:none;
@@ -126,8 +141,7 @@ const ModalWrap = styled.div`
 `
 
 
-
-export default function MainLayout({ children, settingsClickListener }: IProps) {
+export default function MainLayout({children, settingsClickListener}: IProps) {
     const [modal, setModal] = useState<boolean>(false)
     const [modal2, setModal2] = useState<boolean>(false)
 
@@ -192,6 +206,7 @@ export default function MainLayout({ children, settingsClickListener }: IProps) 
             <Nav>
                 <LogoComponent />
                 <div className="middle-box"></div>
+                <WordSearchFormComponent/>
                 <button className="btn" onClick={settingsClickListener}>
                     <IconSettingsSVG color="white" />
                 </button>
