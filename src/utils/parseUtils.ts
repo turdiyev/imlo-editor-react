@@ -274,6 +274,7 @@ export const clearLatinContent = (content: string) => {
         .replace(/[\u0400-\u04FF]/g, ' ')
         .replace(/\–\—\-/g, '-')
         .replace(/\s-\s/g, '')
+        .replace(/\n/g, ' ')
         .replace(/\s{2,}/g, ' ')
         .replace(/\B-?([\w]+\-?[\w]+)-?\B/g, "$1")
 

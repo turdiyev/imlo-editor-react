@@ -76,11 +76,11 @@ const EditorWrap = styled.div`
         overflow:auto;
         .incorrect-word{
             display:inline-block;
-            padding:1px 0;
             margin:0 2px;
-            color:red;
-            /*background: rgba(255,10,10, 0.3);*/
-            border-bottom: 1px solid red;
+            /*color:red;*/
+            /*background: rgba(255,10,10, 0.1);*/
+            border-bottom: 2px dashed red;
+            /*border-radius:5px;*/  
         }
     }
     .editable:focus{

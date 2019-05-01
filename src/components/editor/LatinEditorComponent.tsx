@@ -8,6 +8,7 @@ import IconTrashSVG from "../svg/IconTrashSVG"
 import {debounce} from 'lodash';
 import {IContentObject} from "../../type/EditorTypes";
 import LatinWordsTableComponent from "./LatinWordsTableComponent";
+import IconCheckSVG from "../svg/IconCheckSVG";
 
 interface IProps {
     changeCrylicData: (s: string) => void,
@@ -62,6 +63,14 @@ const EditorFooter = styled.div`
         font-size:12px !important;
         border: 1px solid #5983e8;*/
     }
+    
+    .action-box .btn-spell-check{
+        /*border: 1px solid #488740;*/
+        background: rgba(10,255,20, 0.2);
+    }
+    .action-box .btn-spell-check:hover{
+        border: 1px solid #488740 !important;
+    }
     .action-box .btn:hover{
         border: 1px solid #666;
         background: white;
@@ -102,6 +111,7 @@ export default function LatinEditorComponent({
         htmlContent += "<";
         const incorrect_words: string[] = parseUtils.findLatinIncorrectWords(latinEditor.current.innerText);
 
+        htmlContent  = htmlContent.replace(/<span class="incorrect-word">([^<]+)<\/span>/g, "$1")
         htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
             (all: string, b: string, c: string, f: string): string => {
                 let parsed_str = parseUtils.changeSingleQuotes(c);
@@ -148,9 +158,9 @@ export default function LatinEditorComponent({
                             onClick={e => copyListener(latinObj.textContent, "Kirilcha matni(HTML siz)")}>
                         <CopyTextContentSVG title="Faqat matnni nusxalash"/>
                     </button>
-                    <button className="btn"
+                    <button className="btn btn-spell-check"
                             onClick={e => verifyListener()}>
-                        <CopyTextContentSVG title="Faqat matnni nusxalash"/> Verify
+                        <IconCheckSVG color="#488740" />
                     </button>
                 </div>
             </EditorFooter>
