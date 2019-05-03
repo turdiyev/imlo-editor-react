@@ -2,12 +2,15 @@ import React, {useState} from 'react'
 import IconSearchSVG from "../../components/svg/IconSearchSVG";
 import posed from "react-pose";
 import styled from "styled-components";
-import {debounce, includes, slice} from "lodash"
+import {debounce, includes, isEmpty, slice, startsWith} from "lodash"
 import {LATIN_IMLO_ARRAY} from "../../constants/latinWords";
 
 interface IProps {
 }
 
+interface ISearchConfig {
+    searchPlace: string
+}
 const SidebarStyle = styled.div`
     .overlay-wrapper{
             position:fixed;
@@ -17,6 +20,7 @@ const SidebarStyle = styled.div`
             left:0;
             z-index:1;
             background:rgba(0,0,0,0.2);
+            
     }
     .search-sidebar{
         position:fixed;
@@ -53,22 +57,40 @@ const SidebarStyle = styled.div`
         width: 40px;
         color:#999;
     }
+    .search-sidebar footer{
+        padding:10px;
+        background:rgba(0,0,0,0.05);
+    }
+    .search-sidebar .search-config {
+        label{
+            input{
+                width:16px;
+                height:16px;
+                vertical-align:text-bottom;
+                margin-right:3px;
+            }
+            &+label{
+                margin-left:15px;
+            }
+        }
+    }
     `
 
 const SidebarBody = styled.div`
+    flex:1
     ul{
         font-size: 18px;
         li{
             cursor:pointer;
             padding: 15px 20px;
             display:flex;
-            line-height:1.4;
+            line-height:24px;
             color:#666;
             span{
                 flex:1;
             }
             &+li{
-                border-top:1px solid #fafafa;
+                border-top:1px solid rgba(0,0,0,0.1);
             }
             svg{
                 margin-right: 10px;
@@ -82,18 +104,23 @@ const SidebarBody = styled.div`
                 color:#999;
                 text-align:center;
             }
+            &.not-found-item{
+                color:#ccc;
+                justify-content:center;
+                padding-top:20px
+            }
         }
     }
 `
 
 const OverlayBox = posed.div({
-    hidden: {opacity: 0},
-    visible: {opacity: 1},
+    hidden: {opacity: 0, applyAtEnd: {display: 'none'}},
+    visible: {opacity: 1, applyAtStart: {display: 'block'}},
 });
 
 const SearchSidebar = posed.div({
-    hidden: {opacity: 0},
-    visible: {opacity: 1},
+    hidden: {opacity: 0, applyAtEnd: {display: 'none'}},
+    visible: {opacity: 1, applyAtStart: {display: 'flex'}},
     exit: {
         x: '200%'
     },
@@ -107,20 +134,29 @@ const SearchSidebar = posed.div({
 
 export default function WordSearchFormComponent({}: IProps) {
     const [visibleSearchBar, setVisibleSearchBar] = useState<boolean>(false);
+    const [searchConfig, setSearchConfig] = useState<ISearchConfig>({searchPlace: "start"});
     const [searchValue, setSearchValue] = useState<string>("");
     const [wordList, setWordList] = useState<string[]>([]);
     const searchSubmitListener = (e: any) => {
-
+        e.preventDefault();
     }
     let timer: undefined | number;
-    const inputKeyupListener = (searchValue: string) => {
+    const inputKeyupListener = (searchValue: string, searchPlace: string) => {
         setSearchValue(searchValue);
         if (timer) {
             clearTimeout(timer);
         }
         new Promise(resolve => {
                 timer = setTimeout(() =>
-                        resolve(LATIN_IMLO_ARRAY.filter((word: string) => searchValue && includes(word, searchValue))),
+                        resolve(LATIN_IMLO_ARRAY.filter((word: string) => {
+                            if (searchValue) {
+                                if (searchPlace == 'any') {
+                                    return includes(word, searchValue)
+                                } else {
+                                    return startsWith(word, searchValue)
+                                }
+                            }
+                        })),
                     100)
             }
         )
@@ -136,15 +172,19 @@ export default function WordSearchFormComponent({}: IProps) {
     }
     const debouncedKeyupListener = debounce(inputKeyupListener, 500)
 
+    const searchPlaceChangeListener = (place: string) => {
+        setSearchConfig({searchPlace: place});
+        inputKeyupListener(searchValue, place)
+    }
     return (
         <>
             <form className="word-search-box" onSubmit={searchSubmitListener}>
                 <input type="text"
                        className="word-search"
                        placeholder={"so'zni qidiring..."}
-                       onKeyUp={(e: any) => debouncedKeyupListener(e.target.value)}
+                       onKeyUp={(e: any) => debouncedKeyupListener(e.target.value, searchConfig.searchPlace)}
                 />
-                <button className="btn" type="submit">
+                <button className="btn hide" type="submit">
                     <IconSearchSVG color="white"/>
                 </button>
             </form>
@@ -157,14 +197,28 @@ export default function WordSearchFormComponent({}: IProps) {
                 <SearchSidebar className="search-sidebar" pose={visibleSearchBar ? 'visible' : 'hidden'}>
                     <SidebarBody>
                         <ul className="list">
-                            {wordList.map((word: string, index: number) =>
-                                <li key={index}>
-                                    {word}
-                                </li>)}
+                            {isEmpty(wordList) ? <li className="not-found-item">Topilmadi!</li> :
+                                wordList.map((word: string, index: number) =>
+                                    <li key={index}>
+                                        {word}
+                                    </li>)}
                         </ul>
                     </SidebarBody>
-                    <footer>
-
+                    <footer className="search-footer">
+                        <div className="search-config">
+                            <label>
+                                <input type="radio" name="place"
+                                       checked={searchConfig.searchPlace == 'start'}
+                                       onChange={e => searchPlaceChangeListener('start')}/>
+                                So'z boshidan
+                            </label>
+                            <label>
+                                <input type="radio" name="place"
+                                       checked={searchConfig.searchPlace == 'any'}
+                                       onChange={e => searchPlaceChangeListener('any')}/>
+                                Ixtiyor joydan
+                            </label>
+                        </div>
                     </footer>
                 </SearchSidebar>
             </SidebarStyle>

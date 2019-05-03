@@ -214,7 +214,7 @@ export default function MainLayout({children, settingsClickListener}: IProps) {
             {children}
             <Footer>
                 <ul className="footer-menu list">
-                    <li><b>© Imlo Editor - 2019 </b> </li>
+                    <li><b>© Imlo Editor - 2019</b> <span>(sinov rejimida ishlamoqda)</span></li>
                     <li><a onClick={(e: any) => setModal(true)}>Loyiha haqida</a></li>
                     <li><a onClick={(e: any) => setModal2(true)}>Foydalanilgan manbalar</a></li>
                 </ul>
