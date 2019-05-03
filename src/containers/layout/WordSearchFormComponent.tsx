@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import IconSearchSVG from "../../components/svg/IconSearchSVG";
 import posed from "react-pose";
 import styled from "styled-components";
-import {debounce, includes, isEmpty, slice, startsWith} from "lodash"
+import {debounce, isEmpty, slice} from "lodash"
 import {LATIN_IMLO_ARRAY} from "../../constants/latinWords";
 
 interface IProps {
@@ -151,9 +151,9 @@ export default function WordSearchFormComponent({}: IProps) {
                         resolve(LATIN_IMLO_ARRAY.filter((word: string) => {
                             if (searchValue) {
                                 if (searchPlace == 'any') {
-                                    return includes(word, searchValue)
+                                    return word.search(/searchValue/ig) > -1
                                 } else {
-                                    return startsWith(word, searchValue)
+                                    return word.search(new RegExp('^' + searchValue, 'i')) > -1
                                 }
                             }
                         })),
@@ -181,6 +181,7 @@ export default function WordSearchFormComponent({}: IProps) {
             <form className="word-search-box" onSubmit={searchSubmitListener}>
                 <input type="text"
                        className="word-search"
+                       style={{minWidth:260}}
                        placeholder={"so'zni qidiring..."}
                        onKeyUp={(e: any) => debouncedKeyupListener(e.target.value, searchConfig.searchPlace)}
                 />
