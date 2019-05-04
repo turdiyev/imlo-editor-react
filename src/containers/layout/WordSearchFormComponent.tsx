@@ -4,6 +4,7 @@ import posed from "react-pose";
 import styled from "styled-components";
 import {debounce, isEmpty, slice} from "lodash"
 import {LATIN_IMLO_ARRAY} from "../../constants/latinWords";
+import * as parseUtils from "../../utils/parseUtils";
 
 interface IProps {
 }
@@ -151,9 +152,9 @@ export default function WordSearchFormComponent({}: IProps) {
                         resolve(LATIN_IMLO_ARRAY.filter((word: string) => {
                             if (searchValue) {
                                 if (searchPlace == 'any') {
-                                    return word.search(/searchValue/ig) > -1
+                                    return word.search(new RegExp(parseUtils.changeSingleQuotes(searchValue), 'ig')) > -1
                                 } else {
-                                    return word.search(new RegExp('^' + searchValue, 'i')) > -1
+                                    return word.search(new RegExp('^' + parseUtils.changeSingleQuotes(searchValue), 'i')) > -1
                                 }
                             }
                         })),
