@@ -3,7 +3,7 @@ import {LATIN_IMLO_ARRAY} from "../constants/latinWords"
 
 export const SYMBOL_TUTUQ = "ʼ";
 export const SYMBOL_FOR_OG = "ʻ";
-export const SYMBOLS_SINGLE_QUOTE_PATTERN = "['`ʼʻ‘']";
+export const SYMBOLS_SINGLE_QUOTE_PATTERN = "['`’ʼ‘ʻ‘']";
 export const CRYLIC_LETTERS = ["А", "а", "Б", "б", "В", "в", "Г", "г", "Д", "д", "Е", "е", "Ё", "ё", "Ж", "ж", "З", "з", "И", "и", "Й", "й", "К", "к", "Л", "л", "М", "м", "Н", "н",
     "О", "о", "П", "п", "Р", "р", "С", "с", "Т", "т", "У", "у", "Ф", "ф", "Х", "х", "Ц", "ц", "Ч", "ч", "Ш", "ш", "Ъ", "ъ", "Ь", "ь", "Э", "э", "Ю", "ю", "Я", "я", "Ў", "ў", "Қ", "қ", "Ғ", "ғ", "Ҳ", "ҳ"]
 export const LATIN_LETTERS = ["A", "a", "B", "b", "V", "v", "G", "g", "D", "d", "Ye", "ye", "Yo", "yo", "J", "j", "Z", "z", "I", "i", "Y", "y", "K", "k", "L", "l", "M", "m", "N", "n", "O",
@@ -439,6 +439,6 @@ export const getOnlyWords = (str: string): string => {
 export const findLatinIncorrectWords = (text: string): string[] => {
     const clearedLatinText: string = clearLatinContent(text);
     const word_list = clearedLatinText.split(" ");
-
+    console.log("WOrdList = ", word_list);
     return uniqBy(word_list.filter((word: string) => !includes(LATIN_IMLO_ARRAY, word)), toLower);
 }
