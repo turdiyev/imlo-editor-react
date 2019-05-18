@@ -1,6 +1,6 @@
 import {includes, toLower, toUpper, trim, uniqBy, upperFirst} from "lodash"
-import {LATIN_IMLO_ARRAY, json} from "../constants/latinWords"
-import { WordObject } from "../type/WordObjectType";
+import {LATIN_IMLO_ARRAY} from "../constants/latinWords"
+import {latinCrylicWords} from "../constants/latin_crylic_words.ts"
 
 export const SYMBOL_TUTUQ = "ʼ";
 export const SYMBOL_FOR_OG = "ʻ";
@@ -46,7 +46,29 @@ export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     ["хмель", "xmel"],
     ["холодильник", "xolodilnik"],
     ["альманах", "almanax"],
-    ["автомобильсозлик", "avtomobilsozlik"],
+    ["автомобиль", "avtomobil"],
+    ["акварель", "akvarel"],
+    ["алкоголь", "alkogol"],
+    ["альбом", "albom"],
+    ["альманах", "almanax"],
+    ["альпини", "alpini"],
+    ["ансамбль", "ansambl"],
+    ["апельсин", "apelsin"],
+    ["артель", "artel"],
+    ["артикль", "artikl"],
+    ["асфальт", "asfalt"],
+    ["асфальт", "asfalt"],
+    ["ателье", "atelye"],
+    ["бандероль", "banderol"],
+    ["батальон", "batalyon"],
+    ["билль", "bill"],
+    ["бильярд", "bilyard"],
+    ["большевик", "bolshevik"],
+    ["брильянт", "brilyant"],
+    ["бульдозер", "buldozer"],
+    ["валерьянка", "valeryanka"],
+    ["вальс", "vals"],
+    ["ведомость", "vedomost"],
     ["премьер", "premer"],
     ["интерьер", "interer"],
     ["рельс", "rels"],
@@ -68,6 +90,7 @@ export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     ["апостиль", "apostil"],
     ["маньяк", "manyak"],
     ["ультиматум", "ultimatum"],
+    ["ультра", "ultra"],
     ["отель", "otel"],
     ["параллель", "parallel"],
     ["карьер", "karyer"],
@@ -444,6 +467,17 @@ export const findLatinIncorrectWords = (text: string): string[] => {
     return uniqBy(word_list.filter((word: string) => !includes(LATIN_IMLO_ARRAY, word)), toLower);
 }
 
+
+const parsed_list = latinCrylicWords.filter(word => {
+
+
+    return word.includes("ь") && word.search(/\w/g) == -1
+
+}).map(word => {
+    const latin = parseToLatin(word);
+    return {word, parsed: latin, isCorrectLatin: LATIN_IMLO_ARRAY.includes(latin)}
+}).filter(s => !s.isCorrectLatin)
+console.log(parsed_list)
 
 
 // const filtered_word_slugs: string[] = [];
