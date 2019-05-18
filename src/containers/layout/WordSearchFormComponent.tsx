@@ -171,7 +171,7 @@ export default function WordSearchFormComponent({}: IProps) {
             setVisibleSearchBar(false);
         }
     }
-    const debouncedKeyupListener = debounce(inputKeyupListener, 500)
+    const debouncedKeyupListener = debounce(inputKeyupListener, 3000)
 
     const searchPlaceChangeListener = (place: string) => {
         setSearchConfig({searchPlace: place});
