@@ -1,5 +1,6 @@
 import {includes, toLower, toUpper, trim, uniqBy, upperFirst} from "lodash"
-import {LATIN_IMLO_ARRAY} from "../constants/latinWords"
+import {LATIN_IMLO_ARRAY, json} from "../constants/latinWords"
+import { WordObject } from "../type/WordObjectType";
 
 export const SYMBOL_TUTUQ = "ʼ";
 export const SYMBOL_FOR_OG = "ʻ";
@@ -442,3 +443,33 @@ export const findLatinIncorrectWords = (text: string): string[] => {
     console.log("WOrdList = ", word_list);
     return uniqBy(word_list.filter((word: string) => !includes(LATIN_IMLO_ARRAY, word)), toLower);
 }
+
+
+
+// const filtered_word_slugs: string[] = [];
+// const filtered_words: WordObject[] = [];
+// json.forEach((item: WordObject, index: number) => {
+//     const arr = item.name.split(" ").map((part: string) => {
+//         const slug = parseLatinAsSlug(part)
+//         if (!filtered_word_slugs.includes(slug)) {
+//             filtered_words.push({ 
+//                 id: (filtered_words.length+1),
+//              name: part,
+//                  slug, 
+//                  info: item.info,
+//                   full_word: item.name,
+//                   variants:item.name!=part?[item.name]:[] 
+//                   })
+//             filtered_word_slugs.push(slug)
+//         }else{
+//             const foundIndex = filtered_word_slugs.indexOf(slug)
+//             const foundWordItem = filtered_words[foundIndex];
+//             if(foundWordItem.name != item.name){
+//                 filtered_words[foundIndex].variants.push(item.name)
+//             }
+//         }
+//     });
+// })
+
+
+// console.log(JSON.stringify(filtered_words,2,2))
