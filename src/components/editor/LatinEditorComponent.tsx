@@ -1,5 +1,6 @@
 import React from 'react'
 import * as parseUtils from "../../utils/parseUtils"
+import * as spellCheckUtils from "../../utils/spellCheckUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "./../svg/CopyHTMLContentSVG"
 import CopyTextContentSVG from "../svg/CopyTextContentSVG"
@@ -109,7 +110,7 @@ export default function LatinEditorComponent({
         // setLat
         let htmlContent = latinEditor.current.innerHTML;
         htmlContent += "<";
-        const incorrect_words: string[] = parseUtils.findLatinIncorrectWords(latinEditor.current.innerText);
+        const incorrect_words: string[] = spellCheckUtils.findLatinIncorrectWords(latinEditor.current.innerText);
 
         htmlContent  = htmlContent.replace(/<span class="incorrect-word">([^<]+)<\/span>/g, "$1")
         htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,

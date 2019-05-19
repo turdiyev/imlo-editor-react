@@ -158,7 +158,7 @@ export default function WordSearchFormComponent({}: IProps) {
                                 }
                             }
                         })),
-                    100)
+                    1000)
             }
         )
             .then((list: any) => {
@@ -171,7 +171,7 @@ export default function WordSearchFormComponent({}: IProps) {
             setVisibleSearchBar(false);
         }
     }
-    const debouncedKeyupListener = debounce(inputKeyupListener, 3000)
+    const debouncedKeyupListener = debounce(inputKeyupListener, 500)
 
     const searchPlaceChangeListener = (place: string) => {
         setSearchConfig({searchPlace: place});
