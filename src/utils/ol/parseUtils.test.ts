@@ -21,15 +21,19 @@ const test_array: string[][] = [
     ["мўътабар", "moʻtabar"],
     ["мўъжиза", "moʻjiza"],
     ["исҳоқ", `is${SYMBOL_TUTUQ}hoq`],
-    ["большевик", "bolshevik"], 
+    ["большевик", "bolshevik"],
     ["брильянт", "brilyant"],
-     ["дельфин", "delfin"], 
+    ["дельфин", "delfin"],
     ["медальон", "medalon"],
-     ["меньшевик", "menshevik"],
-      ["октябрь", "oktabr"],
-     ["премьера", "premyera"], 
-     ["руль", "rul"],
-      ["консульт", "konsult"]
+    ["меньшевик", "menshevik"],
+    ["октябрь", "oktabr"],
+    ["премьера", "premyera"],
+    ["руль", "rul"],
+    ["цент", "sent"],
+    ["сентабр", "sentabr"],
+    ["сентябрь", "sentyabr"],
+    ["консульт", "konsult"],
+    ["таҳсин", "tahsin"]
 ]
 test("parseUtils.parseToLatin(crylicText) test  ", () => {
     test_array.map((inArray) => {
