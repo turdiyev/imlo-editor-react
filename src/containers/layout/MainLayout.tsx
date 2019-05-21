@@ -40,6 +40,7 @@ const Nav = styled.nav`
             background:rgba(255,255,255,0.5);
             font-size:16px;
             padding: 7px 12px;
+            height:34px;
         }
         .btn{
             height:60px;
