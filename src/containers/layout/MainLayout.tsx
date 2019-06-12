@@ -108,7 +108,7 @@ const ModalWrap = styled.div`
     .modal {
         position: fixed;
         width: 500px;
-        height: 480px;
+        min-height: 460px;
         top:50%;
         z-index:5;
         margin-top:-270px;
@@ -116,7 +116,7 @@ const ModalWrap = styled.div`
         border-radius: 10px;
         padding:20px;
         &.modal2{
-            height: 240px;
+            min-height: 240px;
             margin-top:-140px;
         }
         header{
@@ -128,7 +128,7 @@ const ModalWrap = styled.div`
         }
         section{
             overflow:auto;
-            max-height: 400px;
+            max-height: 360px;
             padding:1px 0;
             text-align:left;
             p{
