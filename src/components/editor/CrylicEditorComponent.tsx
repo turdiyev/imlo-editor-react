@@ -84,7 +84,7 @@ export default function CrylicEditorComponent({
             changeLatinData(htmlContent)
     }
 
-    const debouncedCrylicListener = debounce(crylicContentListener, 50)
+    const debouncedCrylicListener = debounce(crylicContentListener, 300)
 
 
     return (

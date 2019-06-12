@@ -104,35 +104,35 @@ export default function LatinEditorComponent({
             changeCrylicData(htmlContent)
     }
 
-    const debouncedLatinListener = debounce(latinContentListener, 500)
+    const debouncedLatinListener = debounce(latinContentListener, 300)
 
-    const verifyListener = () => {
-        // setLat
-        let htmlContent = latinEditor.current.innerHTML;
-        htmlContent += "<";
-        const incorrect_words: string[] = spellCheckUtils.findLatinIncorrectWords(latinEditor.current.innerText);
-
-        htmlContent  = htmlContent.replace(/<span class="incorrect-word">([^<]+)<\/span>/g, "$1")
-        htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
-            (all: string, b: string, c: string, f: string): string => {
-                let parsed_str = parseUtils.changeSingleQuotes(c);
-                // parsed_str = parsed_str.replace(/&([^;]+);/g, (all: string, first: string) =>
-                //     "&" + parseUtils.parseToLatin(first) + ";")
-
-                incorrect_words.map((word: string) => {
-                    parsed_str = parsed_str.replace(
-                        new RegExp(`\\b(${word})\\b`, 'ig'),
-                        "<span class=\"incorrect-word\">$1</span>"
-                    )
-                })
-                return String(b + parsed_str + f);
-            })
-        htmlContent = htmlContent.slice(0, -1);
-
-        console.log("INCORRECT words -------", incorrect_words);
-
-        changeLatinData(htmlContent)
-    }
+    // const verifyListener = () => {
+    //     // setLat
+    //     let htmlContent = latinEditor.current.innerHTML;
+    //     htmlContent += "<";
+    //     const incorrect_words: string[] = spellCheckUtils.findLatinIncorrectWords(latinEditor.current.innerText);
+    //
+    //     htmlContent  = htmlContent.replace(/<span class="incorrect-word">([^<]+)<\/span>/g, "$1")
+    //     htmlContent = htmlContent.replace(/(>?)(.[^>]+)(<)/g,
+    //         (all: string, b: string, c: string, f: string): string => {
+    //             let parsed_str = parseUtils.changeSingleQuotes(c);
+    //             // parsed_str = parsed_str.replace(/&([^;]+);/g, (all: string, first: string) =>
+    //             //     "&" + parseUtils.parseToLatin(first) + ";")
+    //
+    //             incorrect_words.map((word: string) => {
+    //                 parsed_str = parsed_str.replace(
+    //                     new RegExp(`\\b(${word})\\b`, 'ig'),
+    //                     "<span class=\"incorrect-word\">$1</span>"
+    //                 )
+    //             })
+    //             return String(b + parsed_str + f);
+    //         })
+    //     htmlContent = htmlContent.slice(0, -1);
+    //
+    //     console.log("INCORRECT words -------", incorrect_words);
+    //
+    //     changeLatinData(htmlContent)
+    // }
     return (
         <div className='editable-box'>
             <div ref={latinEditor}
@@ -159,10 +159,10 @@ export default function LatinEditorComponent({
                             onClick={e => copyListener(latinObj.textContent, "Kirilcha matni(HTML siz)")}>
                         <CopyTextContentSVG title="Faqat matnni nusxalash"/>
                     </button>
-                    <button className="btn btn-spell-check"
-                            onClick={e => verifyListener()}>
-                        <IconCheckSVG color="#488740" />
-                    </button>
+                    {/*{<button className="btn btn-spell-check"*/}
+                            {/*onClick={e => verifyListener()}>*/}
+                        {/*<IconCheckSVG color="#488740" />*/}
+                    {/*</button>}*/}
                 </div>
             </EditorFooter>
             {false && <LatinWordsTableComponent latinObj={latinObj}/>}

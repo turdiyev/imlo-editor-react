@@ -124,8 +124,11 @@ const ModalWrap = styled.div`
             display:flex;
             align-items: center;
             padding-bottom:3px;
+            margin-bottom: 10px;
         }
         section{
+            overflow:auto;
+            max-height: 400px;
             padding:1px 0;
             text-align:left;
             p{
@@ -207,7 +210,7 @@ export default function MainLayout({children, settingsClickListener}: IProps) {
             <Nav>
                 <LogoComponent />
                 <div className="middle-box"></div>
-                <WordSearchFormComponent/>
+                {false &&<WordSearchFormComponent/>}
                 <button className="btn" onClick={settingsClickListener}>
                     <IconSettingsSVG color="white" />
                 </button>
