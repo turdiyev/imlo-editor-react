@@ -1,4 +1,4 @@
-import { parseToCrylic, parseToLatin, SYMBOL_TUTUQ } from "../parseUtils";
+import {parseToCrylic, parseToLatin, SYMBOL_TUTUQ} from "../parseUtils";
 
 const test_array: string[][] = [
     ["елкан", "yelkan"],
@@ -33,7 +33,12 @@ const test_array: string[][] = [
     ["сентабр", "sentabr"],
     ["сентябрь", "sentyabr"],
     ["консульт", "konsult"],
-    ["таҳсин", "tahsin"]
+    ["таҳсин", "tahsin"],
+    ["объект", "obyekt"],
+    ["субъект", "subyekt"],
+    ["пицца", "pitsa"],
+    ["Инъеста", "Inyesta"],
+    ["швеция", "shvetsiya"]
 ]
 test("parseUtils.parseToLatin(crylicText) test  ", () => {
     test_array.map((inArray) => {

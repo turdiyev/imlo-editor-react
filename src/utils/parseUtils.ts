@@ -21,36 +21,38 @@ export const CRYLIC_MAP: Map<string, string> = new Map(CRYLIC_LETTER_PAIRS)
 export const LATIN_MAP: Map<string, string> = new Map(LATIN_LETTER_PAIRS)
 
 export const RUSSIAN_YO_YU_YE_YA_LETTER_TERMS: ReadonlyArray<[string, string]> = [
-    ["ключ", "kluch"],
-    ["бюджет", "budjet"],
-    ["костюм", "kastum"],
-    ["бюллетень", "bulleten"],
-    ["Людмила", "Ludmila"],
-    ["Люксембург", "Luksemburg"],
-    ["гастролёр", "gastrolor"],
-    ["люкс", "luks"],
-    ["гипюр", "gipur"],
-    ["моллюска", "molluska"],
-    ["дублёр", "dublor"],
-    ["плюс", "plus"],
-    ["ингалятор", "ingalator"],
-    ["пряник", "pranik"],
-    ["иллюзия", "illuziya"],
-    ["парашют", "parashut"],
-    ["иллюминатор", "illuminator"],
-    ["пляж", "plaj"],
-    ["кастрюлька", "kastrulka"],
-    ["регулятор", "regulator"],
-    ["катюша", "katusha"],
-    ["клёш", "klosh"],
-    ["салют", "salut"],
-    ["клюква", "klukva"],
-    ["сюжет", "sujet"],
-    ["коляска", "kolaska"],
-    ["сюита", "suita"],
-    ["стажёр", "stajor"],
-    ["люстра", "lustra"],
-    ["фляга", "flagа"]
+    // ["ключ", "kluch"],
+    // ["бюджет", "budjet"],
+    // ["костюм", "kastum"],
+    // ["бюллетень", "bulleten"],
+    // ["Людмила", "Ludmila"],
+    // ["Люксембург", "Luksemburg"],
+    // ["гастролёр", "gastrolor"],
+    // ["люкс", "luks"],
+    // ["гипюр", "gipur"],
+    // ["моллюска", "molluska"],
+    // ["дублёр", "dublor"],
+    // ["плюс", "plus"],
+    // ["ингалятор", "ingalator"],
+    // ["пряник", "pranik"],
+    // ["иллюзия", "illuziya"],
+    // ["парашют", "parashut"],
+    // ["иллюминатор", "illuminator"],
+    // ["пляж", "plaj"],
+    // ["кастрюлька", "kastrulka"],
+    // ["регулятор", "regulator"],
+    // ["катюша", "katusha"],
+    // ["клёш", "klosh"],
+    // ["салют", "salut"],
+    // ["клюква", "klukva"],
+    // ["сюжет", "sujet"],
+    // ["коляска", "kolaska"],
+    // ["сюита", "suita"],
+    // ["стажёр", "stajor"],
+    // ["люстра", "lustra"],
+    // ["фляга", "flagа"],
+    ["объект", "obyekt"],
+    ["субъект", "subyekt"],
 ];
 
 export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
@@ -120,7 +122,14 @@ export const RUSSIAN_ь_LETTER_TERMS: ReadonlyArray<[string, string]> = [
     // ["Октябрь", "Oktabr"], ["Ноябрь", "Noyabr"], ["Декабрь", "Dekabr"],
 
 
-    ["автомобиль", "avtomobil"], ["акварель", "akvarel"], ["алкоголь", "alkogol"], ["альбом", "albom"], ["альманах", "almanax"], ["альпинист", "alpinist"], ["альпинизм", "alpinizm"], ["ансамбль", "ansambl"], ["апельсин", "apelsin"], ["апрель", "aprel"], ["артель", "artel"], ["артикль", "artikl"], ["асфальт", "asfalt"], ["ателье", "atelye"], ["бандероль", "banderol"], ["батальон", "batalyon"], ["билль", "bill"], ["бильярд", "bilyard"], ["большевик", "bolshevik"], ["брильянт", "brilyant"], ["бульдозер", "buldozer"], ["валерьянка", "valeryanka"], ["вальс", "vals"], ["ведомость", "vedomost"], ["вентиль", "ventil"], ["вермишель", "vermishel"], ["видеофильм", "videofilm"], ["виолончель", "violonchel"], ["вольт", "volt"], ["вольтметр", "voltmetr"], ["вольфрам", "volfram"], ["вульгар", "vulgar"], ["гантель", "gantel"], ["гастроль", "gastrol"], ["гильза", "gilza"], ["гольф", "golf"], ["госпиталь", "gospital"], ["гуашь", "guash"], ["двигатель", "dvigatel"], ["девальвация", "devalvatsiya"], ["декабрь", "dekabr"], ["дельта", "delta"], ["дельтаплан", "deltaplan"], ["дельфин", "delfin"], ["дизель-мотор", "dizel-motor"], ["деталь", "detal"], ["диагональ", "diagonal"], ["диафильм", "diafilm"], ["дизель", "dizel"], ["дизель-мотор", "dizel-motor"], ["дирижабль", "dirijabl"], ["дуэль", "duel"], ["жентльмен", "jentlmen"], ["женьшен", "jenshen"], ["импульс", "impuls"], ["инвентарь", "inventar"], ["инсульт", "insult"], ["интервью", "intervyu"], ["итальян", "italyan"], ["июль", "iyul"], ["июнь", "iyun"], ["кабель", "kabel"], ["календарь", "kalendar"], ["калька", "kalka"], ["калькулятор", "kalkulyator"], ["кальций", "kalsiy"], ["капсуль", "kapsul"], ["карамель", "karamel"], ["карусель", "karusel"], ["кастрюлька", "kastryulka"], ["катапульта", "katapulta"], ["кинофестиваль", "kinofestival"], ["кинофильм", "kinofilm"], ["кисель", "kisel"], ["князь", "knyaz"], ["компьютер", "kompyuter"], ["конферансье", "konferansye"], ["концлагерь", "konslager"], ["коньки", "konki"], ["коньюнктура", "konyunktura"], ["коньяк", "konyak"], ["культиватор", "kultivator"], ["культивация", "kultivatsiya"], ["курьер", "kuryer"], ["лагерь", "lager"], ["лось", "los"], ["мебель", "mebel"], ["медаль", "medal"], ["медальон", "medalon"], ["меньшевизм", "menshevizm"], ["меньшевик", "menshevik"], ["модель", "model"], ["монастирь", "monastir"], ["мультипликация", "multiplikatsiya"], ["мультимедиа", "multimedia"], ["мультимиллионер", "multimillioner"], ["мультсериал", "multserial"], ["нашатирь", "nashatir"], ["нефть", "neft"], ["никель", "nikel"], ["ноль", "nol"], ["ноябрь", "noyabr"], ["октябрь", "oktabr"], ["пальма", "palma"], ["пальто", "palto"], ["пароль", "parol"], ["патруль", "patrul"], ["педаль", "pedal"], ["портфель", "portfel"], ["поршень", "porshen"], ["премьера", "premyera"], ["пульс", "puls"], ["пульт", "pult"], ["пьеса", "pyesa"], ["резьба", "rezba"], ["рельеф", "relyef"], ["рельс", "rels"], ["рентабель", "rentabel"], ["рицарь", "ritsar"], ["роль", "rol"], ["рояль", "royal"], ["руль", "rul"], ["сальдо", "saldo"], ["сентябрь", "sentyabr"], ["синька", "sinka"], ["спектакль", "spektakl"], ["спираль", "spiral"], ["судья", "sudya"], ["сульфат", "sulfat"], ["табель", "tabel"], ["туннель", "tunnel"], ["тушь", "tush"], ["тюлень", "tyulen"], ["ультиматум", "ultimatum"], ["ультрабинафша", "ultrabinafsha"], ["ультратовуш", "ultratovush"], ["ультрақисқа", "ultraqisqa"], ["факультатив", "fakultativ"], ["факультет", "fakultet"], ["февраль", "fevral"], ["фельдмаршал", "feldmarshal"], ["фельдшер", "feldsher"], ["фельетон", "felyeton"], ["фестиваль", "festival"], ["фильм", "film"], ["фильмоскоп", "filmoskop"], ["фильмотека", "filmoteka"], ["фильтр", "filtr"], ["фольклор", "folklor"], ["фонарь", "fonar"], ["фортепьяно", "fortepyano"], ["фотоальбом", "fotoalbom"], ["фьючерс", "fyuchers"], ["цельсий", "selsiy"], ["циркуль", "sirkul"], ["шинель", "shinel"], ["шифоньер", "shifonyer"], ["шпатель", "shpatel"], ["шпиндель", "shpindel"], ["эмаль", "emal"], ["эмульсия", "emulsiya"], ["консульт", "konsult"], ["январь", "yanvar"]
+    ["автомобиль", "avtomobil"], ["акварель", "akvarel"], ["алкоголь", "alkogol"], ["альбом", "albom"],
+    ["альманах", "almanax"], ["альпинист", "alpinist"], ["альпинизм", "alpinizm"], ["ансамбль", "ansambl"],
+    ["апельсин", "apelsin"], ["апрель", "aprel"], ["артель", "artel"], ["артикль", "artikl"], ["асфальт", "asfalt"],
+    ["ателье", "atelye"], ["бандероль", "banderol"], ["батальон", "batalyon"], ["билль", "bill"], ["бильярд", "bilyard"],
+    ["большевик", "bolshevik"], ["брильянт", "brilyant"], ["бульдозер", "buldozer"], ["валерьянка", "valeryanka"],
+    ["вальс", "vals"], ["ведомость", "vedomost"], ["вентиль", "ventil"], ["вермишель", "vermishel"],
+    ["видеофильм", "videofilm"], ["виолончель", "violonchel"], ["вольт", "volt"], ["вольтметр", "voltmetr"],
+    ["вольфрам", "volfram"], ["вульгар", "vulgar"], ["гантель", "gantel"], ["гастроль", "gastrol"], ["гильза", "gilza"], ["гольф", "golf"], ["госпиталь", "gospital"], ["гуашь", "guash"], ["двигатель", "dvigatel"], ["девальвация", "devalvatsiya"], ["декабрь", "dekabr"], ["дельта", "delta"], ["дельтаплан", "deltaplan"], ["дельфин", "delfin"], ["дизель-мотор", "dizel-motor"], ["деталь", "detal"], ["диагональ", "diagonal"], ["диафильм", "diafilm"], ["дизель", "dizel"], ["дизель-мотор", "dizel-motor"], ["дирижабль", "dirijabl"], ["дуэль", "duel"], ["жентльмен", "jentlmen"], ["женьшен", "jenshen"], ["импульс", "impuls"], ["инвентарь", "inventar"], ["инсульт", "insult"], ["интервью", "intervyu"], ["итальян", "italyan"], ["июль", "iyul"], ["июнь", "iyun"], ["кабель", "kabel"], ["календарь", "kalendar"], ["калька", "kalka"], ["калькулятор", "kalkulyator"], ["кальций", "kalsiy"], ["капсуль", "kapsul"], ["карамель", "karamel"], ["карусель", "karusel"], ["кастрюлька", "kastryulka"], ["катапульта", "katapulta"], ["кинофестиваль", "kinofestival"], ["кинофильм", "kinofilm"], ["кисель", "kisel"], ["князь", "knyaz"], ["компьютер", "kompyuter"], ["конферансье", "konferansye"], ["концлагерь", "konslager"], ["коньки", "konki"], ["коньюнктура", "konyunktura"], ["коньяк", "konyak"], ["культиватор", "kultivator"], ["культивация", "kultivatsiya"], ["курьер", "kuryer"], ["лагерь", "lager"], ["лось", "los"], ["мебель", "mebel"], ["медаль", "medal"], ["медальон", "medalon"], ["меньшевизм", "menshevizm"], ["меньшевик", "menshevik"], ["модель", "model"], ["монастирь", "monastir"], ["мультипликация", "multiplikatsiya"], ["мультимедиа", "multimedia"], ["мультимиллионер", "multimillioner"], ["мультсериал", "multserial"], ["нашатирь", "nashatir"], ["нефть", "neft"], ["никель", "nikel"], ["ноль", "nol"], ["ноябрь", "noyabr"], ["октябрь", "oktabr"], ["пальма", "palma"], ["пальто", "palto"], ["пароль", "parol"], ["патруль", "patrul"], ["педаль", "pedal"], ["портфель", "portfel"], ["поршень", "porshen"], ["премьера", "premyera"], ["пульс", "puls"], ["пульт", "pult"], ["пьеса", "pyesa"], ["резьба", "rezba"], ["рельеф", "relyef"], ["рельс", "rels"], ["рентабель", "rentabel"], ["рицарь", "ritsar"], ["роль", "rol"], ["рояль", "royal"], ["руль", "rul"], ["сальдо", "saldo"], ["сентябрь", "sentyabr"], ["синька", "sinka"], ["спектакль", "spektakl"], ["спираль", "spiral"], ["судья", "sudya"], ["сульфат", "sulfat"], ["табель", "tabel"], ["туннель", "tunnel"], ["тушь", "tush"], ["тюлень", "tyulen"], ["ультиматум", "ultimatum"], ["ультрабинафша", "ultrabinafsha"], ["ультратовуш", "ultratovush"], ["ультрақисқа", "ultraqisqa"], ["факультатив", "fakultativ"], ["факультет", "fakultet"], ["февраль", "fevral"], ["фельдмаршал", "feldmarshal"], ["фельдшер", "feldsher"], ["фельетон", "felyeton"], ["фестиваль", "festival"], ["фильм", "film"], ["фильмоскоп", "filmoskop"], ["фильмотека", "filmoteka"], ["фильтр", "filtr"], ["фольклор", "folklor"], ["фонарь", "fonar"], ["фортепьяно", "fortepyano"], ["фотоальбом", "fotoalbom"], ["фьючерс", "fyuchers"], ["цельсий", "selsiy"], ["циркуль", "sirkul"], ["шинель", "shinel"], ["шифоньер", "shifonyer"], ["шпатель", "shpatel"], ["шпиндель", "shpindel"], ["эмаль", "emal"], ["эмульсия", "emulsiya"], ["консульт", "konsult"], ["январь", "yanvar"]
 ]
 
 export const RUSSIAN_EXTRA_LETTER_TERMS: ReadonlyArray<[string, string]> = [
@@ -132,6 +141,7 @@ export const RUSSIAN_EXTRA_LETTER_TERMS: ReadonlyArray<[string, string]> = [
 ]
 
 export const RUSSIAN_TS_LETTER_TERMS: ReadonlyArray<[string, string]> = [
+    ["пицца", "pitsa"],
     ["шприц", "shpris"],
     ["антициклон", "antisiklon"],
     ["глицирин", "glitserin"],
@@ -263,6 +273,7 @@ export const RUSSIAN_TS_LETTER_TERMS: ReadonlyArray<[string, string]> = [
 ]
 
 export const RUSSIAN_TERMS: Map<string, string> = new Map([
+    ...RUSSIAN_YO_YU_YE_YA_LETTER_TERMS,
     ...RUSSIAN_ь_LETTER_TERMS,
     ...RUSSIAN_EXTRA_LETTER_TERMS,
     ...RUSSIAN_TS_LETTER_TERMS
@@ -373,7 +384,8 @@ export const parseToLatin = (crylic_text: string = ""): string => {
 
     crylic_text = crylic_text.replace(/([с])ҳ/ig, `$1${SYMBOL_TUTUQ}h`)
     crylic_text = crylic_text.replace(/([ў])ъ/ig, '$1')
-    // crylic_text = crylic_text.replace(/([ь])е/ig, '$1е')
+    crylic_text = crylic_text.replace(/([ъ])е/ig, 'ye')
+    // субъект
     crylic_text = crylic_text.replace(/([иуўоае])ц([иуўоае])/ig, '$1ts$2')
     crylic_text = crylic_text.replace(/([^иуўоаеьёюя\s])е/ig, '$1э')
     // crylic_text = crylic_text.replace(/([^иуўоаеь\s])е/ig, '$1э')
