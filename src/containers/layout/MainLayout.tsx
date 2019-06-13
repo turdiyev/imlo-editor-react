@@ -210,7 +210,7 @@ export default function MainLayout({children, settingsClickListener}: IProps) {
             <Nav>
                 <LogoComponent />
                 <div className="middle-box"></div>
-                {false &&<WordSearchFormComponent/>}
+               <WordSearchFormComponent/>
                 <button className="btn" onClick={settingsClickListener}>
                     <IconSettingsSVG color="white" />
                 </button>

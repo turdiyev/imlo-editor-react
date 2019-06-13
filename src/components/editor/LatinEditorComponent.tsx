@@ -1,6 +1,6 @@
 import React from 'react'
 import * as parseUtils from "../../utils/parseUtils"
-import * as spellCheckUtils from "../../utils/spellCheckUtils"
+// import * as spellCheckUtils from "../../utils/spellCheckUtils"
 import styled from 'styled-components';
 import CopyHTMLContentSVG from "./../svg/CopyHTMLContentSVG"
 import CopyTextContentSVG from "../svg/CopyTextContentSVG"

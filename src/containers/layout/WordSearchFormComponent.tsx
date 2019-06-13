@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import IconSearchSVG from "../../components/svg/IconSearchSVG";
 import posed from "react-pose";
 import styled from "styled-components";
-import { debounce, isEmpty, slice } from "lodash"
-import { LATIN_IMLO_ARRAY } from "../../constants/latinWords";
+import {debounce, isEmpty, slice} from "lodash"
+import {LATIN_WORDS} from "../../constants/latinWords";
 import * as parseUtils from "../../utils/parseUtils";
-import { Spin, Icon } from 'antd';
-import raf from "raf"
+import {Icon, Spin} from 'antd';
+
 interface IProps {
 }
 
 interface ISearchConfig {
     searchPlace: string
+}
+
+interface IWord {
+    name: string,
+    info: string
 }
 const SidebarStyle = styled.div`
     .overlay-wrapper{
@@ -115,62 +120,53 @@ const SidebarBody = styled.div`
     }
 `
 
+const LoaderWrap = styled.div`
+    
+`
+
 const OverlayBox = posed.div({
     hidden: { opacity: 0, applyAtEnd: { display: 'none' } },
     visible: { opacity: 1, applyAtStart: { display: 'block' } },
 });
 
 const SearchSidebar = posed.div({
-    hidden: { opacity: 0, applyAtEnd: { display: 'none' } },
+    hidden: {opacity: 0.5, applyAtEnd: {display: 'none'}},
     visible: { opacity: 1, applyAtStart: { display: 'flex' } },
     exit: {
         x: '200%'
     },
     enter: {
         x: '0%',
-        delay: 100,
+        delay: 10,
         beforeChildren: true,
         staggerChildren: 10
     }
 });
-
 
 export default function WordSearchFormComponent({ }: IProps) {
     const [visibleSearchBar, setVisibleSearchBar] = useState<boolean>(false);
     const [searchConfig, setSearchConfig] = useState<ISearchConfig>({ searchPlace: "start" });
     const [searchValue, setSearchValue] = useState<string>("");
     const [loader, setLoader] = useState<boolean>(false);
-    const [wordList, setWordList] = useState<string[]>([]);
-    const searchSubmitListener = (e: any) => {
-        e.preventDefault();
-    }
-    let timer: undefined | number;
-    const inputKeyupListener = (searchValue: string, searchPlace: string) => {
+    const [wordList, setWordList] = useState<IWord[]>([]);
+
+
+    const inputKeyupListener = (searchString: string, searchPlace: string) => {
         setLoader(true)
 
-        setSearchValue(searchValue);
-        if (timer) {
-            clearTimeout(timer);
-        }
         new Promise(resolve => {
-            setTimeout(() => {
-                raf(function tick() {
-                    // Animation logic
-                    resolve(LATIN_IMLO_ARRAY.filter((word: string) => {
-
-                        if (searchValue) {
+            resolve(
+                LATIN_WORDS
+                    .filter((object: IWord) => {
+                        const word = object.name;
+                        if (searchString) {
                             if (searchPlace == 'any') {
-                                return word.search(new RegExp(parseUtils.changeSingleQuotes(searchValue), 'ig')) > -1
+                                return word.search(new RegExp(parseUtils.changeSingleQuotes(searchString), 'ig')) > -1
                             } else {
-                                return word.search(new RegExp('^' + parseUtils.changeSingleQuotes(searchValue), 'i')) > -1
+                                return word.search(new RegExp('^' + parseUtils.changeSingleQuotes(searchString), 'i')) > -1
                             }
                         }
-                    })),
-                        // 100)
-
-                        raf(tick)
-                })
-            }, 1000)
+                    }))
         })
             .then((list: any) => {
                 setLoader(false)
@@ -182,19 +178,23 @@ export default function WordSearchFormComponent({ }: IProps) {
                 throw e;
             })
 
-        if (searchValue) {
+        if (searchString) {
             setVisibleSearchBar(true);
         } else {
             setVisibleSearchBar(false);
         }
     }
-    const debouncedKeyupListener = debounce(inputKeyupListener, 500)
+    const debouncedKeyupListener = debounce(inputKeyupListener, 1)
 
     const searchPlaceChangeListener = (place: string) => {
         setSearchConfig({ searchPlace: place });
         inputKeyupListener(searchValue, place)
     }
 
+    const searchSubmitListener = (e: any) => {
+        e.preventDefault();
+        debouncedKeyupListener(searchValue, searchConfig.searchPlace)
+    }
     const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
     return (
@@ -204,26 +204,35 @@ export default function WordSearchFormComponent({ }: IProps) {
                     className="word-search"
                     style={{ minWidth: 260 }}
                     placeholder={"so'zni qidiring..."}
-                    onKeyUp={(e: any) => debouncedKeyupListener(e.target.value, searchConfig.searchPlace)}
+                    onKeyUp={(e: any) => setSearchValue(e.target.value)}
                 />
                 <button className="btn hide" type="submit">
                     <IconSearchSVG color="white" />
                 </button>
             </form>
+            {loader &&
+            <LoaderWrap>
+                <OverlayBox
+                    className="overlay-wrapper" pose={loader ? 'visible' : 'hidden'}>
+                    <Spin indicator={antIcon}/>
+                </OverlayBox>
+            </LoaderWrap>}
 
-            <SidebarStyle>
+
+            {visibleSearchBar && <SidebarStyle>
                 <OverlayBox
                     onClick={e => setVisibleSearchBar(false)}
                     className="overlay-wrapper" pose={visibleSearchBar ? 'visible' : 'hidden'}>
                 </OverlayBox>
-                <SearchSidebar className="search-sidebar" pose={visibleSearchBar ? 'visible' : 'hidden'}>
+
+                <div className="search-sidebar">
                     <SidebarBody>
                         <ul className="list">
                             {loader ? <li><Spin indicator={antIcon} /></li> :
                                 isEmpty(wordList) ? <li className="not-found-item">Topilmadi!</li> :
-                                    wordList.map((word: string, index: number) =>
+                                    wordList.map((word: IWord, index: number) =>
                                         <li key={index}>
-                                            {word}
+                                            {word.name}
                                         </li>)}
                         </ul>
                     </SidebarBody>
@@ -231,20 +240,21 @@ export default function WordSearchFormComponent({ }: IProps) {
                         <div className="search-config">
                             <label>
                                 <input type="radio" name="place"
-                                    checked={searchConfig.searchPlace == 'start'}
-                                    onChange={e => searchPlaceChangeListener('start')} />
+                                       checked={searchConfig.searchPlace == 'start'}
+                                       onChange={e => searchPlaceChangeListener('start')}/>
                                 So'z boshidan
                             </label>
                             <label>
                                 <input type="radio" name="place"
-                                    checked={searchConfig.searchPlace == 'any'}
-                                    onChange={e => searchPlaceChangeListener('any')} />
+                                       checked={searchConfig.searchPlace == 'any'}
+                                       onChange={e => searchPlaceChangeListener('any')}/>
                                 Ixtiyor joydan
                             </label>
                         </div>
                     </footer>
-                </SearchSidebar>
-            </SidebarStyle>
+                </div>
+                }
+            </SidebarStyle>}
         </>
     )
 }
