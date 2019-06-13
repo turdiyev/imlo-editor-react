@@ -3,7 +3,7 @@ import IconSearchSVG from "../../components/svg/IconSearchSVG";
 import posed from "react-pose";
 import styled from "styled-components";
 import {debounce, isEmpty, slice} from "lodash"
-import {LATIN_WORDS} from "../../constants/latinWords";
+import {LATIN_IMLO_ARRAY} from "../../constants/latinWords";
 import * as parseUtils from "../../utils/parseUtils";
 import {Icon, Spin} from 'antd';
 
@@ -121,12 +121,23 @@ const SidebarBody = styled.div`
 `
 
 const LoaderWrap = styled.div`
-    
+    .overlay-wrapper{
+            position:fixed;
+            right:0;
+            top:0;
+            bottom:0;
+            left:0;
+            background:rgba(0,0,0,0.1);
+            z-index:99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    }
 `
 
 const OverlayBox = posed.div({
     hidden: { opacity: 0, applyAtEnd: { display: 'none' } },
-    visible: { opacity: 1, applyAtStart: { display: 'block' } },
+    visible: { opacity: 1, applyAtStart: { display: 'flex' } },
 });
 
 const SearchSidebar = posed.div({
@@ -148,7 +159,7 @@ export default function WordSearchFormComponent({ }: IProps) {
     const [searchConfig, setSearchConfig] = useState<ISearchConfig>({ searchPlace: "start" });
     const [searchValue, setSearchValue] = useState<string>("");
     const [loader, setLoader] = useState<boolean>(false);
-    const [wordList, setWordList] = useState<IWord[]>([]);
+    const [wordList, setWordList] = useState<string[]>([]);
 
 
     const inputKeyupListener = (searchString: string, searchPlace: string) => {
@@ -156,9 +167,8 @@ export default function WordSearchFormComponent({ }: IProps) {
 
         new Promise(resolve => {
             resolve(
-                LATIN_WORDS
-                    .filter((object: IWord) => {
-                        const word = object.name;
+                LATIN_IMLO_ARRAY
+                    .filter((word: string) => {
                         if (searchString) {
                             if (searchPlace == 'any') {
                                 return word.search(new RegExp(parseUtils.changeSingleQuotes(searchString), 'ig')) > -1
@@ -184,18 +194,21 @@ export default function WordSearchFormComponent({ }: IProps) {
             setVisibleSearchBar(false);
         }
     }
-    const debouncedKeyupListener = debounce(inputKeyupListener, 1)
+    const debouncedKeyupListener = debounce(inputKeyupListener, 100)
 
     const searchPlaceChangeListener = (place: string) => {
+
         setSearchConfig({ searchPlace: place });
         inputKeyupListener(searchValue, place)
     }
 
     const searchSubmitListener = (e: any) => {
+        setLoader(true)
+
         e.preventDefault();
         debouncedKeyupListener(searchValue, searchConfig.searchPlace)
     }
-    const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+    const antIcon = <Icon type="loading" style={{ fontSize: 48 }} spin />;
 
     return (
         <>
@@ -210,10 +223,9 @@ export default function WordSearchFormComponent({ }: IProps) {
                     <IconSearchSVG color="white" />
                 </button>
             </form>
-            {loader &&
-            <LoaderWrap>
+            {loader && <LoaderWrap>
                 <OverlayBox
-                    className="overlay-wrapper" pose={loader ? 'visible' : 'hidden'}>
+                    className="overlay-wrapper" pose={true ? 'visible' : 'hidden'}>
                     <Spin indicator={antIcon}/>
                 </OverlayBox>
             </LoaderWrap>}
@@ -225,14 +237,14 @@ export default function WordSearchFormComponent({ }: IProps) {
                     className="overlay-wrapper" pose={visibleSearchBar ? 'visible' : 'hidden'}>
                 </OverlayBox>
 
-                <div className="search-sidebar">
+                <SearchSidebar className="search-sidebar" pose={visibleSearchBar ? 'visible' : 'hidden'}>
                     <SidebarBody>
                         <ul className="list">
-                            {loader ? <li><Spin indicator={antIcon} /></li> :
+                            {loader ? <li className="not-found-item">Qidirilmoqda...</li> :
                                 isEmpty(wordList) ? <li className="not-found-item">Topilmadi!</li> :
-                                    wordList.map((word: IWord, index: number) =>
+                                    wordList.map((word: string, index: number) =>
                                         <li key={index}>
-                                            {word.name}
+                                            {word}
                                         </li>)}
                         </ul>
                     </SidebarBody>
@@ -252,8 +264,7 @@ export default function WordSearchFormComponent({ }: IProps) {
                             </label>
                         </div>
                     </footer>
-                </div>
-                }
+                </SearchSidebar>
             </SidebarStyle>}
         </>
     )

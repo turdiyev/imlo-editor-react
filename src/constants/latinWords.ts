@@ -1,30 +1,22 @@
 import lzString from "lz-string"
-import json from "./latin_words.json"
-// import BASE64_LATIN_WORDS_STRING from "./latinWordsBase64"
-import {WordObject} from "../type/WordObjectType"
+import { startsWith } from "lodash"
+import json from "./latin_word_object_list.json"
+import BASE64_LATIN_WORDS_STRING from "./latinWordsBase64"
+import { WordObject } from "../type/WordObjectType"
 
 export {json}
 // export const LATIN_IMLO_DICT: string = lzString.compressToBase64(JSON.stringify(json));
 // export const LATIN_IMLO_BASE64:string = lzString.compressToBase64(JSON.stringify(words));
 
-export const setLatinWords = () => {
-
-    localStorage.setItem("latin_words", JSON.stringify(json))
-
-}
-setLatinWords()
-
-export const getLatinWords = () => {
-    return localStorage.hasOwnProperty("latin_words") && JSON.parse(localStorage.getItem("latin_words") || "[]")
-}
-
-export const LATIN_WORDS = getLatinWords()
 export const compressToBase64 = (jsonValue: any): string => {
     return lzString.compressToBase64(JSON.stringify(jsonValue))
 }
 export const decompressFromBase64 = (str: string): WordObject[] => {
     return JSON.parse(lzString.decompressFromBase64(str))
 }
+
+export const LATIN_IMLO_DICT: WordObject[] = decompressFromBase64(BASE64_LATIN_WORDS_STRING)
+export const LATIN_IMLO_ARRAY: string[] = LATIN_IMLO_DICT.map((obj: WordObject) => obj.name);
 
 
 // export const test = () => {
